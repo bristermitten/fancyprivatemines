@@ -1,0 +1,5 @@
+name: FancyPrivateMines
+version: @version@
+main: me.bristermitten.fancyprivatemines.FancyPrivateMines
+softdepend: [ AutoSell, Gangs, WorldGuard, PlotSquared, WorldEdit, Vault, Citizens, MineResetLite ]
+authors: [ BristerMitten ]
