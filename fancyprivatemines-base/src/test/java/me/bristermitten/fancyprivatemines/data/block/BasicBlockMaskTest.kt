@@ -1,5 +1,7 @@
 package me.bristermitten.fancyprivatemines.data.block
 
+import me.bristermitten.fancyprivatemines.data.block.BasicBlockMask
+import me.bristermitten.fancyprivatemines.data.block.BlockData
 import io.kotest.assertions.retry
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.ints.beInRange
