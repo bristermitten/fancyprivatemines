@@ -10,14 +10,21 @@ class BasicBlockMask(
 
     private val probabilities = run {
         val map = TreeMap<Double, BlockData>()
+
         var total = 0.0
         probabilities.forEach {
             map[it.key + total] = it.value
             total += it.key
         }
 
+        if (total != 100.0) {
+            throw IllegalStateException("Probabilities must add up to 100!")
+        }
+
         map
     }
+
+    val percentageProbabilities = TreeMap(probabilities)
 
     private val sum by lazy {
         probabilities.keys.sum()
