@@ -6,8 +6,10 @@ import me.bristermitten.fancyprivatemines.util.areaTo
 import org.bukkit.Location
 
 class VanillaBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod {
+    override val id: String = "Vanilla"
+    override val priority: Int = -1
 
-    init {
+    override fun init() {
         plugin.logger.warning {
             """
             You are using the Vanilla Block Setting Method for mines. This will degrade performance and using FAWE / AWE / WE is highly recommended!

@@ -12,6 +12,9 @@ import org.bukkit.World
 import java.util.*
 
 class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod {
+    override val id: String = "FAWE"
+    override val priority: Int = 5 //FAWE is the highest speed, so will be prioritised
+
     private val sessionCache = WeakHashMap<World, EditSession>()
 
     private val World.editSession
