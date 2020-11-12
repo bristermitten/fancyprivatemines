@@ -1,4 +1,4 @@
-package me.bristermitten.fancyprivatemines.hook.blocks
+package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.data.block.BlockMask
 import me.bristermitten.fancyprivatemines.function.Functionality

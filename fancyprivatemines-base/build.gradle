@@ -1,0 +1,11 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
+
+dependencies {
+    implementation 'org.fusesource.jansi:jansi:2.0.1' //for colours in console
+}

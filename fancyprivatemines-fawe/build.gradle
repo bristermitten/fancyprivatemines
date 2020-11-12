@@ -1,0 +1,12 @@
+repositories {
+    maven { url 'http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
+    maven { url 'https://maven.enginehub.org/repo/' }
+}
+
+dependencies {
+    compileOnly project(':fancyprivatemines-base')
+    compileOnly 'com.boydti:fawe-api:latest'
+    compileOnly('com.sk89q.worldedit:worldedit-bukkit:6.0.0-SNAPSHOT') {
+        exclude group: 'org.bukkit'
+    }
+}

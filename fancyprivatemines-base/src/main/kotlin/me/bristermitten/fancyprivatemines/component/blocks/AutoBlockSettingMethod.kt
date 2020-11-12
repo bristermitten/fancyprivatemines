@@ -1,4 +1,4 @@
-package me.bristermitten.fancyprivatemines.hook.blocks
+package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.data.block.BlockMask
@@ -9,12 +9,10 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
 
     override val priority: Int = Int.MIN_VALUE
 
-    private lateinit var using: BlockSettingMethod
-
     override fun init() {
         plugin.configuration.blockSetting.methods.active = plugin.configuration.blockSetting.methods.all.maxByOrNull {
             it.priority
-        }!! //Should never be empty
+        }!!.also { it.init() } //Should never be empty
     }
 
     override fun setBlock(location: Location, data: BlockMask) {

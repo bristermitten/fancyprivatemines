@@ -1,0 +1,8 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+}
+
+dependencies {
+    implementation project(':fancyprivatemines-base')
+    implementation project(':fancyprivatemines-fawe')
+}

@@ -3,4 +3,5 @@ rootProject.name = 'fancyprivatemines'
 include 'fancyprivatemines-fawe'
 include 'fancyprivatemines-base'
 include 'fancyprivatemines-all'
+include 'fancyprivatemines-all'
 

@@ -11,6 +11,15 @@ open class Functionalities<T : Functionality>(default: T) {
         functionalities[functionality.id] = functionality
     }
 
+    fun setActiveTo(id: String, ifNull: (id: String) -> Unit = {}) {
+        val get = get(id)
+        if (get != null) {
+            this.active = get
+        } else {
+            ifNull(id)
+        }
+    }
+
     operator fun get(id: String): T? {
         return functionalities[id]
     }

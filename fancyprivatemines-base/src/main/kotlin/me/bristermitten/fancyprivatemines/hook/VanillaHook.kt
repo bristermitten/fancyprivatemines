@@ -1,7 +1,7 @@
-package me.bristermitten.fancyprivatemines.hook.blocks
+package me.bristermitten.fancyprivatemines.hook
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.hook.Hook
+import me.bristermitten.fancyprivatemines.component.blocks.VanillaBlockSettingMethod
 
 class VanillaHook : Hook {
     //We will always have vanilla functionality available
