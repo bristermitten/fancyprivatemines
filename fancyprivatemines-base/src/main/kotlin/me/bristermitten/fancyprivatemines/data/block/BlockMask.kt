@@ -4,5 +4,4 @@ interface BlockMask {
     fun generate(): BlockData
 
     fun generateBulk(amount: Int): List<BlockData>
-
 }

@@ -11,7 +11,5 @@ class PrivateMinesConfiguration(val plugin: FancyPrivateMines) {
         private val auto = AutoBlockSettingMethod(plugin)
 
         val methods = BlockSettingMethods(auto)
-
     }
-
 }
