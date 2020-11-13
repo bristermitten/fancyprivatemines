@@ -15,10 +15,10 @@ class VanillaBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMet
         plugin.logger.warning {
             Ansi.ansi().fg(Color.RED).boldOff().toString() + """
                 
-            | You are using the Vanilla Block Setting Method for mines. This will degrade performance and using FAWE / AWE / WE is highly recommended! |
-            |       https://www.spigotmc.org/resources/fast-async-worldedit.13932/                                                                     |
-            |       https://www.spigotmc.org/resources/asyncworldedit.327/                                                                             |
-            |       https://dev.bukkit.org/projects/worldedit                                                                                          |
+            == You are using the Vanilla Block Setting Method for mines. This will degrade performance and using FAWE / AWE / WE is highly recommended! ==
+            >       https://www.spigotmc.org/resources/fast-async-worldedit.13932/
+            >       https://www.spigotmc.org/resources/asyncworldedit.327/
+            >       https://dev.bukkit.org/projects/worldedit
             """.trimIndent() + Ansi.ansi().reset()
         }
     }

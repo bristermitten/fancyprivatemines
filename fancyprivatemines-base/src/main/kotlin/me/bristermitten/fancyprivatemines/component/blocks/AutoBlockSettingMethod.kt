@@ -11,7 +11,7 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
 
     override fun init() {
         plugin.configuration.blockSetting.methods.active = plugin.configuration.blockSetting.methods.all.maxByOrNull {
-            it.priority
+            it.priority //Get the highest priority method
         }!!.also { it.init() } //Should never be empty
     }
 

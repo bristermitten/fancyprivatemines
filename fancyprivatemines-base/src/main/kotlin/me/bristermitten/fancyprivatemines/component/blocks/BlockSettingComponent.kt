@@ -7,7 +7,11 @@ class BlockSettingComponent : Component {
 
     override fun init(plugin: FancyPrivateMines) {
         val configuration = plugin.configuration
-        configuration.blockSetting.methods.setActiveTo(plugin.pmConfig.blockSettingMethod)
+        configuration.blockSetting.methods.setActiveTo(plugin.pmConfig.blockSettingMethod) {
+            plugin.logger.warning {
+                "No Valid Block Setting Method \"${plugin.pmConfig.blockSettingMethod}\". Are you missing a required plugin?"
+            }
+        }
         configuration.blockSetting.methods.active.init()
 
         plugin.logger.info {
