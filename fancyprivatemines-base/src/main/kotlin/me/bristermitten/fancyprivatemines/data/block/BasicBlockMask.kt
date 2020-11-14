@@ -54,5 +54,4 @@ class BasicBlockMask(
                 }.filter(Objects::nonNull)
                 .toList()
     }
-
 }
