@@ -39,7 +39,12 @@ class FancyPrivateMines : JavaPlugin() {
                 .filterHasNoArgConstructor()
                 .map { it.getConstructor().newInstance() }
                 .filter(Hook::canRegister)
-                .onEach { it.register(this) } //FP with side effects :)
+                .onEach {
+                    logger.fine {
+                        "Loaded hook ${it.javaClass.name}"
+                    }
+                    it.register(this)
+                } //FP with side effects :)
                 .count()
 
         logger.info { "Registered $hooksLoaded Hooks!" }
