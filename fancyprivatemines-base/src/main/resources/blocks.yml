@@ -1,0 +1,7 @@
+Blocks:
+  STONE: [] # Empty tag means that anyone can use this block
+  DIAMOND_BLOCK:
+    - "[MONEY] 50" #Users must spend $50 to unlock this block
+    - "[PERMISSION] rank.diamond_block" #and have the rank.diamond_block permission
+    - "[TIER] G" #They must also be at least tier G
+    - "[MAX_PERCENTAGE] 30" #A Private Mine cannot contain more than 30% DIAMOND_BLOCKS

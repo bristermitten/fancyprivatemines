@@ -1,7 +1,7 @@
 package me.bristermitten.fancyprivatemines.lang
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.component.Component
+import me.bristermitten.fancyprivatemines.component.FPMComponent
 import me.bristermitten.fancyprivatemines.lang.formatter.LanguageFormatter
 import me.bristermitten.fancyprivatemines.lang.formatter.MiniMessageFormatter
 import me.bristermitten.fancyprivatemines.lang.key.LangKey
@@ -13,7 +13,7 @@ import org.bukkit.entity.Player
 import java.io.File
 import net.kyori.adventure.text.Component as AdventureComponent
 
-class LangComponent : Component {
+class LangComponent : FPMComponent {
 
     private val languages = mutableMapOf<String, Language>()
     private val miniMessageFormatter = MiniMessageFormatter()

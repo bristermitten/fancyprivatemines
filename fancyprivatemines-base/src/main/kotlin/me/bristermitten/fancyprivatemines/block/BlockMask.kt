@@ -1,4 +1,4 @@
-package me.bristermitten.fancyprivatemines.data.block
+package me.bristermitten.fancyprivatemines.block
 
 interface BlockMask {
     fun generate(): BlockData

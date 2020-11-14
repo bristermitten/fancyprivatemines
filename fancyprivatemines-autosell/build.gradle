@@ -1,0 +1,5 @@
+dependencies {
+    compileOnly project(':fancyprivatemines-base')
+
+    compileOnly files('lib/AutoSellAPI-1.2.0.jar')
+}

@@ -1,7 +1,7 @@
 package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.data.block.BlockMask
+import me.bristermitten.fancyprivatemines.block.BlockMask
 import me.bristermitten.fancyprivatemines.util.areaTo
 import org.bukkit.Location
 import org.fusesource.jansi.Ansi

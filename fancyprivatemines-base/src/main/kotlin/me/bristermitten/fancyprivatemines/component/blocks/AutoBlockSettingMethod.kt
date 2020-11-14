@@ -1,7 +1,7 @@
 package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.data.block.BlockMask
+import me.bristermitten.fancyprivatemines.block.BlockMask
 import org.bukkit.Location
 
 class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSettingMethod {

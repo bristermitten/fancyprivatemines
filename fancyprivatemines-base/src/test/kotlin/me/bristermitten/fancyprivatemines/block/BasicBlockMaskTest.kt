@@ -1,4 +1,4 @@
-package me.bristermitten.fancyprivatemines.data.block
+package me.bristermitten.fancyprivatemines.block
 
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.ints.beInRange

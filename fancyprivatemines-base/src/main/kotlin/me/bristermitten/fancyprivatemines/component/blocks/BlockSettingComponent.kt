@@ -1,9 +1,9 @@
 package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.component.Component
+import me.bristermitten.fancyprivatemines.component.FPMComponent
 
-class BlockSettingComponent : Component {
+class BlockSettingComponent : FPMComponent {
 
     override fun init(plugin: FancyPrivateMines) {
         val configuration = plugin.configuration

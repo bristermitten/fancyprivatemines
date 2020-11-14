@@ -2,7 +2,7 @@ package me.bristermitten.fancyprivatemines.component
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 
-interface Component {
+interface FPMComponent {
 
     fun init(plugin: FancyPrivateMines) = Unit
 

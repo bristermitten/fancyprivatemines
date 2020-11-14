@@ -1,4 +1,4 @@
-package me.bristermitten.fancyprivatemines.data.block
+package me.bristermitten.fancyprivatemines.block
 
 import java.util.*
 import kotlin.streams.toList

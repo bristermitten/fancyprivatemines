@@ -4,4 +4,6 @@ include 'fancyprivatemines-all'
 include 'fancyprivatemines-base'
 include 'fancyprivatemines-fawe'
 include 'fancyprivatemines-papi'
+include 'fancyprivatemines-autosell'
+
 
