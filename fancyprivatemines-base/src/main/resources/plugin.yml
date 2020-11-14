@@ -3,3 +3,7 @@ version: @version@
 main: me.bristermitten.fancyprivatemines.FancyPrivateMines
 softdepend: [ AutoSell, Gangs, WorldGuard, PlotSquared, WorldEdit, FastAsyncWorldEdit, Vault, Citizens, MineResetLite ]
 authors: [ BristerMitten ]
+commands:
+  fancyprivatemines:
+    description: Main command of FancyPrivateMines
+    aliases: [ pm, fpm, mine, privatemine, privatemines ]

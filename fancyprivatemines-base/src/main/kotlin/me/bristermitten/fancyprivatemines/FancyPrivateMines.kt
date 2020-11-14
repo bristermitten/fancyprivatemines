@@ -1,5 +1,6 @@
 package me.bristermitten.fancyprivatemines
 
+import me.bristermitten.fancyprivatemines.command.FancyPrivateMinesCommand
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
@@ -20,6 +21,8 @@ class FancyPrivateMines : JavaPlugin() {
         loadConfig()
         loadHooks()
         loadComponents()
+
+        loadCommands()
     }
 
     private fun loadConfig() {
@@ -47,6 +50,11 @@ class FancyPrivateMines : JavaPlugin() {
         blockSettingComponent.init(this)
 
         logger.info { "Components Loaded" }
+    }
+
+
+    private fun loadCommands() {
+        getCommand("fancyprivatemines").executor = FancyPrivateMinesCommand()
     }
 
     override fun onDisable() {

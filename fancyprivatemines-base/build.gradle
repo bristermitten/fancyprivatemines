@@ -8,4 +8,5 @@ processResources {
 
 dependencies {
     implementation 'org.fusesource.jansi:jansi:2.0.1' //for colours in console
+    implementation 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
 }

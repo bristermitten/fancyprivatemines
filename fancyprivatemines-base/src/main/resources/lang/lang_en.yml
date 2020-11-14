@@ -1,0 +1,8 @@
+Colors:
+  Main: GREEN #1
+  Secondary: LIGHT_PURPLE #2
+  Error: RED #3
+
+
+Errors:
+  UnknownCommand: "Unknown Command. Type [2 suggest: '/fpm help']/fpm help[/2] for help" #The <2> indicates that we want to use the Secondary Color instead
