@@ -5,4 +5,4 @@ Colors:
 
 
 Errors:
-  UnknownCommand: "Unknown Command. Type <secondary>/fpm help</secondary> for help" #The <2> indicates that we want to use the Secondary Color instead
+  UnknownCommand: "<error>Unknown Command. Type <secondary>/fpm help<error> for help"

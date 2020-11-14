@@ -5,7 +5,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 
-open class Command : CommandExecutor {
+abstract class Command : CommandExecutor {
 
     private val subCommandMap = mutableMapOf<String, SubCommand>()
 
@@ -29,10 +29,7 @@ open class Command : CommandExecutor {
         return true
     }
 
-    protected open fun CommandSender.sendUnknownCommand(cmd: String) {
-        sendMessage("Unknown Command $cmd")
-        sendHelp()
-    }
+    protected abstract fun CommandSender.sendUnknownCommand(cmd: String)
 
     private fun CommandSender.sendHelp() {
         sendMessage(subCommandMap.entries.joinToString(separator = "\n") {

@@ -5,17 +5,18 @@ import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
+import me.bristermitten.fancyprivatemines.lang.LangComponent
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
 import org.bukkit.plugin.java.JavaPlugin
-import kotlin.math.log
 
 class FancyPrivateMines : JavaPlugin() {
     val configuration = PrivateMinesConfiguration(this)
     lateinit var pmConfig: PrivateMinesConfig
         private set
 
-    private val blockSettingComponent = BlockSettingComponent()
+    internal val blockSettingComponent = BlockSettingComponent()
+    val langComponent = LangComponent()
 
     override fun onEnable() {
         loadConfig()
@@ -48,16 +49,47 @@ class FancyPrivateMines : JavaPlugin() {
         logger.info { "Loading Components" }
 
         blockSettingComponent.init(this)
+        langComponent.init(this)
 
         logger.info { "Components Loaded" }
     }
 
+    private fun reloadComponents() {
+        logger.info { "Reloading Components" }
+
+        blockSettingComponent.reload(this)
+        langComponent.reload(this)
+
+        logger.info { "Components Reloaded" }
+    }
+
+
+    private fun unloadComponents() {
+        logger.info { "Unloading Components" }
+
+        blockSettingComponent.destroy(this)
+        langComponent.destroy(this)
+
+        logger.info { "Components Unloaded" }
+    }
+
 
     private fun loadCommands() {
-        getCommand("fancyprivatemines").executor = FancyPrivateMinesCommand()
+        getCommand("fancyprivatemines").executor = FancyPrivateMinesCommand(this)
     }
 
     override fun onDisable() {
-        // Plugin shutdown logic
+        unloadComponents()
+    }
+
+    fun reloadConfigData() {
+        super.reloadConfig()
+        this.pmConfig.loadFrom(PrivateMinesConfig.from(config))
+    }
+
+    fun reload() {
+        reloadConfigData()
+
+        reloadComponents()
     }
 }

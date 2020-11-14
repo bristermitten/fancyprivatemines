@@ -3,8 +3,10 @@ plugins {
 }
 
 dependencies {
-    implementation project(':fancyprivatemines-base')
+    api project(':fancyprivatemines-base')
+
     implementation project(':fancyprivatemines-fawe')
+    implementation project(':fancyprivatemines-papi')
 }
 
 shadowJar {

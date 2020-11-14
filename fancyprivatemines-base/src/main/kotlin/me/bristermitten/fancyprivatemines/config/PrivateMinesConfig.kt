@@ -3,9 +3,14 @@ package me.bristermitten.fancyprivatemines.config
 import org.bukkit.configuration.ConfigurationSection
 
 data class PrivateMinesConfig(
-        val blockSettingMethod: String,
-        val defaultLanguage: String
+        var blockSettingMethod: String,
+        var defaultLanguage: String
 ) {
+
+    fun loadFrom(other: PrivateMinesConfig) {
+        this.blockSettingMethod = other.blockSettingMethod
+        this.defaultLanguage = other.defaultLanguage
+    }
 
     companion object {
         fun from(section: ConfigurationSection): PrivateMinesConfig {

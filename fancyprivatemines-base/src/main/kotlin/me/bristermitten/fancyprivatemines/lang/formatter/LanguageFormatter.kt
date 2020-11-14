@@ -1,7 +1,7 @@
 package me.bristermitten.fancyprivatemines.lang.formatter
 
-import org.bukkit.entity.Player
+import org.bukkit.command.CommandSender
 
 interface LanguageFormatter {
-    fun format(message: String, player: Player?): String
+    fun format(message: String, receiver: CommandSender): String
 }

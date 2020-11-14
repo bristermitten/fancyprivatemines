@@ -1,2 +1,2 @@
 Errors:
-  UnknownCommand: "Le command n'est pas sait. Tapez <secondary>/fpm help</secondary> pour l'aide"
+  UnknownCommand: "<error>Le command n'est pas sait. Tapez <secondary>/fpm help<error> pour l'aide"
