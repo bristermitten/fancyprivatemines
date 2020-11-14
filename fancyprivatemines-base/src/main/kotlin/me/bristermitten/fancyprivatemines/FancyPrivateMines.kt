@@ -6,6 +6,7 @@ import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
+import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
 import org.bukkit.plugin.java.JavaPlugin
@@ -40,7 +41,7 @@ class FancyPrivateMines : JavaPlugin() {
                 .map { it.getConstructor().newInstance() }
                 .filter(Hook::canRegister)
                 .onEach {
-                    logger.fine {
+                    logger.fpmDebug {
                         "Loaded hook ${it.javaClass.name}"
                     }
                     it.register(this)
