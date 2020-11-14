@@ -2,10 +2,12 @@ package me.bristermitten.fancyprivatemines
 
 import me.bristermitten.fancyprivatemines.command.FancyPrivateMinesCommand
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
+import me.bristermitten.fancyprivatemines.component.blocks.schematic.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
+import me.bristermitten.fancyprivatemines.mine.PrivateMineStorage
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
@@ -16,8 +18,12 @@ class FancyPrivateMines : JavaPlugin() {
     lateinit var pmConfig: PrivateMinesConfig
         private set
 
-    internal val blockSettingComponent = BlockSettingComponent()
+    @Suppress("MemberVisibilityCanBePrivate")
+    val blockSettingComponent = BlockSettingComponent()
     val langComponent = LangComponent()
+    val schematicPasterComponent = SchematicPasterComponent()
+
+    val storage = PrivateMineStorage()
 
     override fun onEnable() {
         loadConfig()
@@ -56,6 +62,7 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.init(this)
         langComponent.init(this)
+        schematicPasterComponent.init(this)
 
         logger.info { "Components Loaded" }
     }
@@ -65,6 +72,7 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.reload(this)
         langComponent.reload(this)
+        schematicPasterComponent.reload(this)
 
         logger.info { "Components Reloaded" }
     }
@@ -75,20 +83,23 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.destroy(this)
         langComponent.destroy(this)
+        schematicPasterComponent.destroy(this)
 
         logger.info { "Components Unloaded" }
     }
 
 
     private fun loadCommands() {
-        getCommand("fancyprivatemines").executor = FancyPrivateMinesCommand(this)
+        val cmd = FancyPrivateMinesCommand(this)
+        getCommand("fancyprivatemines").executor = cmd
+        getCommand("fancyprivatemines").tabCompleter = cmd
     }
 
     override fun onDisable() {
         unloadComponents()
     }
 
-    fun reloadConfigData() {
+    private fun reloadConfigData() {
         super.reloadConfig()
         this.pmConfig.loadFrom(PrivateMinesConfig.from(config))
     }

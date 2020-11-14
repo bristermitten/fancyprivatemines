@@ -1,5 +1,6 @@
 package me.bristermitten.fancyprivatemines.component.tax
 
+import com.google.common.collect.Table
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.component.FPMComponent
 import org.bukkit.Bukkit

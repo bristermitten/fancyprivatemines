@@ -5,6 +5,7 @@ import me.bristermitten.fancyprivatemines.hook.Hook
 import org.bukkit.Bukkit
 
 class FAWEHook : Hook {
+
     override fun canRegister(): Boolean {
         return Bukkit.getPluginManager().isPluginEnabled("FastAsyncWorldEdit")
     }
@@ -12,5 +13,6 @@ class FAWEHook : Hook {
     override fun register(plugin: FancyPrivateMines) {
         val method = FAWEBlockSettingMethod(plugin)
         plugin.configuration.blockSetting.methods.add(method)
+        plugin.configuration.schematicPasters.add(FAWESchematicPaster())
     }
 }

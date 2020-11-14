@@ -3,11 +3,12 @@ plugins {
 }
 
 dependencies {
-    api project(':fancyprivatemines-base')
+    implementation project(':fancyprivatemines-base')
 
-    implementation project(':fancyprivatemines-fawe')
-    implementation project(':fancyprivatemines-papi')
-    implementation project(':fancyprivatemines-autosell')
+    //Exclude these ones from Shadow Minimization
+    api project(':fancyprivatemines-fawe')
+    api project(':fancyprivatemines-papi')
+    api project(':fancyprivatemines-autosell')
 }
 
 shadowJar {

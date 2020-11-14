@@ -12,10 +12,11 @@ repositories {
     }
 }
 dependencies {
-    implementation 'org.fusesource.jansi:jansi:2.0.1' //for colours in console
     implementation 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
     implementation 'net.kyori:adventure-api:4.0.0-SNAPSHOT'
     implementation 'net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT'
+
+    implementation "io.papermc:paperlib:1.0.5"
 
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }

@@ -16,10 +16,13 @@ subprojects {
         mavenCentral()
         maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
         maven { url 'https://oss.sonatype.org/content/groups/public/'}
+        jcenter()
+        maven { url 'https://papermc.io/repo/repository/maven-public/'}
     }
 
     dependencies {
         compileOnly 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+        implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1"
 
 
         testImplementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'

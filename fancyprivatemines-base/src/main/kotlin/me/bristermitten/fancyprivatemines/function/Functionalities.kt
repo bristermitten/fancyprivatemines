@@ -1,9 +1,15 @@
 package me.bristermitten.fancyprivatemines.function
 
-open class Functionalities<T : Functionality>(default: T) {
+open class Functionalities<T : Functionality>(default: T?) {
     private val functionalities = mutableMapOf<String, T>()
 
-    var active: T = default
+    lateinit var active: T
+
+    init {
+        if(default != null) {
+            active = default
+        }
+    }
 
     val all get() = functionalities.values.toSet()
 
