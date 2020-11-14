@@ -6,3 +6,7 @@ dependencies {
     implementation project(':fancyprivatemines-base')
     implementation project(':fancyprivatemines-fawe')
 }
+
+shadowJar {
+    minimize()
+}

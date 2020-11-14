@@ -5,3 +5,5 @@
 # WE - Hooks into WorldEdit. Requires the plugin to be installed
 # Auto - Hooks into the fastest plugin it can find, or uses Vanilla if no plugins are installed
 BlockSettingMethod: Auto
+
+DefaultLanguage: "en"
