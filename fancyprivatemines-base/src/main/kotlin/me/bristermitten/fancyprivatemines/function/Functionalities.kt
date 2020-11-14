@@ -23,5 +23,4 @@ open class Functionalities<T : Functionality>(default: T) {
     operator fun get(id: String): T? {
         return functionalities[id]
     }
-
 }

@@ -34,7 +34,6 @@ class BasicBlockMask(
         require(probabilities.isNotEmpty()) {
             "Must have at least 1 BlockData in probabilities map"
         }
-
     }
 
     override fun generate(): BlockData {
@@ -55,5 +54,4 @@ class BasicBlockMask(
                 }.filter(Objects::nonNull)
                 .toList()
     }
-
 }
