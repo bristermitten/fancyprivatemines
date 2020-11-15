@@ -1,10 +1,8 @@
 rootProject.name = 'fancyprivatemines'
 
-include 'fancyprivatemines-all'
-include 'fancyprivatemines-base'
-include 'fancyprivatemines-fawe'
-include 'fancyprivatemines-papi'
-include 'fancyprivatemines-autosell'
-include 'fancyprivatemines-paper'
-
+include 'fpm-all'
+include 'fpm-base'
+include 'fpm-fawe'
+include 'fpm-autosell'
+include 'fpm-plotsquared'
 

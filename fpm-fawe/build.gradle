@@ -4,7 +4,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly project(':fancyprivatemines-base')
+    compileOnly project(':fpm-base')
     compileOnly 'com.boydti:fawe-api:latest'
     compileOnly('com.sk89q.worldedit:worldedit-bukkit:6.0.0-SNAPSHOT') {
         exclude group: 'org.bukkit'
