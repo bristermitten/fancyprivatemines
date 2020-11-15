@@ -4,4 +4,4 @@ Colors:
   Secondary: LIGHT_PURPLE #2
   Error: RED #3
 Errors:
-  UnknownCommand: "<error>Unknown Command. Type <secondary>/fpm help<error> for help"
+  UnknownCommand: "<error>Onbekende command. Type<secondary>/fpm help<error>voor hulp"
