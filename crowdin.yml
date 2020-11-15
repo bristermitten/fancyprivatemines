@@ -1,3 +1,4 @@
 files:
   - source: fancyprivatemines-base/src/main/resources/lang/lang_en.yml
-    translation: fancyprivatemines-base/src/main/resources/lang/lang_%two_letters_code%.yml
+    translation: >-
+      /fancyprivatemines-base/src/main/resources/lang/lang_%two_letters_code%.yml
