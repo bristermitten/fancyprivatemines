@@ -1,7 +1,29 @@
 # Options:
-# Vanilla - Vanilla Block Setting (slow, not recommended)
 # FAWE - Hooks into FastAsyncWorldEdit. Requires the plugin to be installed
 # AWE - Hooks into AsyncWorldEdit. Requires the plugin to be installed
 # WE - Hooks into WorldEdit. Requires the plugin to be installed
-# Auto - Hooks into the fastest plugin it can find, or uses Vanilla if no plugins are installed
+# Auto - Hooks into the fastest plugin it can find
 BlockSettingMethod: Auto
+
+# Default language to use if the player has not configured one
+# There must be a lang_x.yml file in FancyPrivateMines/lang
+DefaultLanguage: "en"
+
+# Debug Mode
+# Extra details will be logged if this is enabled
+Debug: false
+
+# Global tax percentage. This value will be deducted whenever a player sells something in a Private Mine
+GlobalTax: 5.0
+
+# Either COMMAND or ITEM
+# COMMAND - Users must do /fpm create to make a new private mine
+# ITEM - Users receive a "private mine block" that they can right click with to summon a new mine
+Placement: COMMAND
+#Item Configuration
+PlacementItem:
+  Type: SKULL
+  Data: 3
+  Owner: '%player%' #This will be the player's head
+
+MineWorld: "privatemines"

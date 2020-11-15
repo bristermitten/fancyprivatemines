@@ -1,0 +1,8 @@
+Colors:
+  Main: GREEN #1
+  Secondary: LIGHT_PURPLE #2
+  Error: RED #3
+
+
+Errors:
+  UnknownCommand: "<error>Unknown Command. Type <secondary>/fpm help<error> for help"

@@ -15,6 +15,5 @@ infix fun Location.areaTo(other: Location): List<Location> {
             }
         }
     }
-
     return blocks
 }

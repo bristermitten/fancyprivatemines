@@ -4,9 +4,8 @@ import com.boydti.fawe.util.EditSessionBuilder
 import com.sk89q.worldedit.EditSession
 import com.sk89q.worldedit.regions.CuboidRegion
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.data.block.BlockMask
-import me.bristermitten.fancyprivatemines.hook.blocks.BlockSettingMethod
-import me.bristermitten.fancyprivatemines.util.areaTo
+import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingMethod
+import me.bristermitten.fancyprivatemines.block.BlockMask
 import org.bukkit.Location
 import org.bukkit.World
 import java.util.*
