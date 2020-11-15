@@ -1,8 +1,20 @@
 Colors:
-  Main: GREEN #1
+  Primary: GREEN #1
   Secondary: LIGHT_PURPLE #2
   Error: RED #3
 
 
 Errors:
-  UnknownCommand: "<error>Unknown Command. Type <secondary>/fpm help<error> for help"
+  UnknownCommand: '<error>Unknown Command. Type <secondary><hover:show_text:"/fpm help"><click:run_command:/fpm help>/fpm help<error> for help'
+  NoPermission: '<error>You need permission <secondary>%permission%<error> to run this command.'
+
+Command:
+  Help:
+    Header: "<primary><bold> == FancyPrivateMines Help =="
+    Command: "<primary>/fpm %cmd_name% - <secondary>%cmd_description%"
+    Footer: "<primary><bold> ============================"
+  Reload:
+    Done: "<primary>Successfully reloaded!"
+
+Info:
+  GeneratingMine: '<primary>Generating a new PrivateMine for you, please wait...'

@@ -5,7 +5,7 @@ import me.bristermitten.fancyprivatemines.block.BlockMask
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import org.bukkit.Location
 
-class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSettingMethod {
+class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSettingMethod() {
     override val id: String = "Auto"
 
     override val priority: Int = Int.MIN_VALUE
@@ -25,6 +25,7 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
                     > https://discord.gg/D2HBcFtU9v
                 """.trimIndent()
             }
+
             if (plugin.pmConfig.debug) {
                 val exception = IllegalStateException("Max priority BlockSettingMethod was AutoBlockSettingMethod.")
                 plugin.logger.fpmDebug {
@@ -32,6 +33,7 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
                 }
                 throw exception
             }
+
             return
         }
 
@@ -43,6 +45,10 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
     }
 
     override fun setBlocksBulk(pos1: Location, pos2: Location, mask: BlockMask) {
+        TODO("AutoBlockSettingMethod must delegate")
+    }
+
+    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) {
         TODO("AutoBlockSettingMethod must delegate")
     }
 }

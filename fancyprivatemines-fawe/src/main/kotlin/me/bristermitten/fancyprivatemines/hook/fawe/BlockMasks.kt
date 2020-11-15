@@ -4,7 +4,7 @@ import com.sk89q.worldedit.function.pattern.RandomPattern
 import me.bristermitten.fancyprivatemines.block.BasicBlockMask
 import me.bristermitten.fancyprivatemines.block.BlockMask
 
-fun BlockMask.toWEBlockMask(): RandomPattern {
+fun BlockMask.toWEPattern(): RandomPattern {
     when (this) {
         is BasicBlockMask -> {
             val pattern = RandomPattern()

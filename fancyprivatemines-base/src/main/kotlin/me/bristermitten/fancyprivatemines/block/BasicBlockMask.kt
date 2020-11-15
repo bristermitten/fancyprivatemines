@@ -18,7 +18,7 @@ class BasicBlockMask(
         }
 
         if (total != 100.0) {
-            throw IllegalStateException("Probabilities must add up to 100!")
+            throw IllegalStateException("Probabilities must add up to 100! $total")
         }
 
         map

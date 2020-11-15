@@ -6,8 +6,9 @@ open class Functionalities<T : Functionality>(default: T?) {
     lateinit var active: T
 
     init {
-        if(default != null) {
+        if (default != null) {
             active = default
+            add(default)
         }
     }
 
@@ -17,7 +18,7 @@ open class Functionalities<T : Functionality>(default: T?) {
         functionalities[functionality.id] = functionality
     }
 
-    fun setActiveTo(id: String, ifNull: (id: String) -> Unit = {}) {
+    fun setActiveToOrElse(id: String, ifNull: (id: String) -> Unit = {}) {
         val get = get(id)
         if (get != null) {
             this.active = get

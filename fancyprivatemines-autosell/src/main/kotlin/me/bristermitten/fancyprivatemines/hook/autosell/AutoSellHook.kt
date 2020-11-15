@@ -3,7 +3,6 @@ package me.bristermitten.fancyprivatemines.hook.autosell
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.component.tax.WrappedSellEvent
 import me.bristermitten.fancyprivatemines.hook.Hook
-import me.bristermitten.fancyprivatemines.lang.formatter.PAPIFormatter
 import me.clip.autosell.events.AutoSellEvent
 import me.clip.autosell.events.SellAllEvent
 import me.clip.autosell.events.SignSellEvent

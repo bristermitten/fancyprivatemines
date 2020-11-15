@@ -2,7 +2,7 @@ package me.bristermitten.fancyprivatemines
 
 import me.bristermitten.fancyprivatemines.command.FancyPrivateMinesCommand
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
-import me.bristermitten.fancyprivatemines.component.blocks.schematic.SchematicPasterComponent
+import me.bristermitten.fancyprivatemines.component.blocks.schematic.paster.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
@@ -106,7 +106,6 @@ class FancyPrivateMines : JavaPlugin() {
 
     fun reload() {
         reloadConfigData()
-
         reloadComponents()
     }
 }

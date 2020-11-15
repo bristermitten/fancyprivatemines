@@ -15,11 +15,12 @@ class MiniMessageFormatter {
         val secondaryColor = settings?.colors?.get(LangColour.Secondary) ?: LangColour.Secondary.defaultValue
         val errorColor = settings?.colors?.get(LangColour.Error) ?: LangColour.Error.defaultValue
 
+
         return miniMessage.parse(
-                message,
-                "primary", primaryColor.toString(),
-                "secondary", secondaryColor.toString(),
-                "error", errorColor.toString(),
+                message
+                        .replace("primary>", primaryColor)
+                        .replace("secondary>", secondaryColor)
+                        .replace("error>", errorColor),
         )
     }
 }

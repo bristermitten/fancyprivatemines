@@ -1,10 +1,14 @@
 package me.bristermitten.fancyprivatemines.function
 
-interface Functionality {
-    val id: String
-    val priority: Int
+abstract class Functionality {
+    abstract val id: String
+    abstract val priority: Int
 
-    fun init() = Unit
+    open fun init() = Unit
 
-    fun destroy() = Unit
+    open fun destroy() = Unit
+
+    override fun toString(): String {
+        return "${javaClass.simpleName}[$id]"
+    }
 }

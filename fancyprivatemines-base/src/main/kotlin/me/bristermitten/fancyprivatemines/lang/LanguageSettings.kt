@@ -6,7 +6,7 @@ import java.util.*
 
 data class LanguageSettings(
         var lang: String,
-        val colors: MutableMap<LangColour, ChatColor>
+        val colors: MutableMap<LangColour, String>
 )
 
 object PlayerLanguageSettings {

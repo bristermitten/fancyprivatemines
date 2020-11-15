@@ -4,6 +4,7 @@ import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.component.FPMComponent
 import me.bristermitten.fancyprivatemines.lang.formatter.LanguageFormatter
 import me.bristermitten.fancyprivatemines.lang.formatter.MiniMessageFormatter
+import me.bristermitten.fancyprivatemines.lang.formatter.PlaceholderFormatter
 import me.bristermitten.fancyprivatemines.lang.key.LangKey
 import me.bristermitten.fancyprivatemines.util.getFolderInResources
 import net.kyori.adventure.platform.bukkit.BukkitAudiences
@@ -79,14 +80,11 @@ class LangComponent : FPMComponent {
     }
 
 
-    fun getMessage(key: LangKey, sender: CommandSender): AdventureComponent {
+    fun getMessage(key: LangKey, sender: CommandSender, vararg placeholders: String): AdventureComponent {
         val player = sender as? Player
-        val language = languages[player?.languageSettings?.lang ?: defaultLanguage] ?: languages[defaultLanguage]
+        val language = languages[player?.languageSettings?.lang] ?: defaultLanguage
 
-        requireNotNull(language) {
-            "No applicable language files!"
-        }
-
+        val formatters = listOf(PlaceholderFormatter(*placeholders)) + formatters
         val message = formatters.fold(language[key]) { msg, f ->
             f.format(msg, sender)
         }
@@ -94,9 +92,9 @@ class LangComponent : FPMComponent {
         return miniMessageFormatter.format(message, player)
     }
 
-    fun message(receiver: CommandSender, key: LangKey) {
+    fun message(receiver: CommandSender, key: LangKey, vararg placeholders: String) {
 
-        val message = getMessage(key, receiver)
+        val message = getMessage(key, receiver, *placeholders)
 
         val player = receiver as? Player
 

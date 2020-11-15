@@ -10,7 +10,7 @@ import org.bukkit.Location
 import org.bukkit.World
 import java.util.*
 
-class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod {
+class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod() {
     override val id: String = "FAWE"
     override val priority: Int = 5 //FAWE is the highest speed, so will be prioritised
 
@@ -38,6 +38,16 @@ class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod
         val session = pos1.world.editSession
 
         val region = CuboidRegion(pos1.toWorldEditVector(), pos2.toWorldEditVector())
-        session.setBlocks(region, mask.toWEBlockMask())
+        session.setBlocks(region, mask.toWEPattern())
+        session.flushQueue()
+    }
+
+    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) {
+        if(locations.isEmpty()) {
+            return
+        }
+        val session = locations[0].world.editSession
+
+        session.setBlocks(locations.map {it.toWorldEditVector()}.toSet(), mask.toWEPattern())
     }
 }

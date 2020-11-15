@@ -7,7 +7,7 @@ import org.bukkit.command.TabExecutor
 
 abstract class Command : TabExecutor {
 
-    private val subCommandMap = mutableMapOf<String, SubCommand>()
+    protected val subCommandMap = mutableMapOf<String, SubCommand>()
 
     protected fun addSubCommand(alias: String, subCommand: SubCommand) {
         subCommandMap[alias.toLowerCase()] = subCommand
@@ -25,25 +25,38 @@ abstract class Command : TabExecutor {
             return true
         }
 
+        if (subCommand.permission != null && sender.hasPermission(subCommand.permission).not()) {
+            sender.sendNoPermission(args[0], subCommand.permission)
+            return true
+        }
+
         subCommand.exec(sender, args.drop(1).toTypedArray())
         return true
     }
 
     final override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<String>): List<String> {
         if (args.isEmpty()) {
-            return subCommandMap.keys.toList()
+            return subCommandMap.entries
+                    .asSequence()
+                    .filter { sender.hasPermission(it.value.permission ?: "") }
+                    .map { it.key }
+                    .toList()
         }
         if (args.size == 1) {
-            return subCommandMap.keys.filter { it.startsWith(args[0]) }
+            return subCommandMap.entries
+                    .asSequence()
+                    .filter {
+                        sender.hasPermission(it.value.permission ?: "")
+                    }
+                    .map { it.key }
+                    .filter { it.startsWith(args[0]) }
+                    .toList()
         }
+
         return emptyList() //TODO
     }
 
     protected abstract fun CommandSender.sendUnknownCommand(cmd: String)
-
-    private fun CommandSender.sendHelp() {
-        sendMessage(subCommandMap.entries.joinToString(separator = "\n") {
-            "/fpm ${it.key} - ${it.value.description ?: ""}"
-        })
-    }
+    protected abstract fun CommandSender.sendHelp()
+    protected abstract fun CommandSender.sendNoPermission(cmd: String, permission: String)
 }
