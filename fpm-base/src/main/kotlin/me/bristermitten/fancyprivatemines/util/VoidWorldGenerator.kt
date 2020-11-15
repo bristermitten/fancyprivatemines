@@ -7,7 +7,7 @@ import java.util.*
 
 object VoidWorldGenerator : ChunkGenerator() {
 
-    override fun generateChunkData(world: World, random: Random, x: Int, z: Int, biome: BiomeGrid): ChunkData {
+    override fun generateChunkData(world: World, random: Random, cx: Int, cz: Int, biome: BiomeGrid): ChunkData {
         val data = createChunkData(world)
         repeat(15) { x ->
             repeat(15) { y ->
