@@ -40,15 +40,11 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
         plugin.configuration.blockSetting.methods.active = maxByOrNull.also { it.init() }
     }
 
-    override fun setBlock(location: Location, data: BlockMask) {
-        TODO("AutoBlockSettingMethod must delegate")
-    }
+    override fun setBlock(location: Location, data: BlockMask) = notAllowed()
 
-    override fun setBlocksBulk(pos1: Location, pos2: Location, mask: BlockMask) {
-        TODO("AutoBlockSettingMethod must delegate")
-    }
+    override fun setBlocksBulk(pos1: Location, pos2: Location, mask: BlockMask) = notAllowed()
 
-    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) {
-        TODO("AutoBlockSettingMethod must delegate")
-    }
+    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) = notAllowed()
+
+    private fun notAllowed(): Nothing = throw UnsupportedOperationException("AutoBlockSettingMethod must delegate")
 }
