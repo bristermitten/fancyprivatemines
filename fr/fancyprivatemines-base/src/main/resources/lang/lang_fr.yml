@@ -4,4 +4,4 @@ Colors:
   Secondary: LIGHT_PURPLE #2
   Error: RED #3
 Errors:
-  UnknownCommand: "<error>Le command n'est pas sait. Tapez <secondary>/fpm help<error> pour l'aide"
+  UnknownCommand: "<error>La commande n'existe pas, tapez <secondary>/fpm help <error> pour obtenir de l'aide"
