@@ -7,6 +7,7 @@ import org.bukkit.Material.COBBLESTONE
 import org.bukkit.Material.STONE
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
+import sun.misc.Unsafe
 import kotlin.math.roundToInt
 
 internal class BasicBlockMaskTest {
@@ -43,5 +44,4 @@ internal class BasicBlockMaskTest {
     }
 
     private fun Int.shouldBeRoughly(value: Int, marginOfError: Int = value / 10) = this should beInRange(value - marginOfError..value + marginOfError)
-
 }

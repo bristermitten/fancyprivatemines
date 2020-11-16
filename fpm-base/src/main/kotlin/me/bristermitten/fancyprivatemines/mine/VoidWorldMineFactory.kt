@@ -4,7 +4,7 @@ import io.papermc.lib.PaperLib
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BasicBlockMask
 import me.bristermitten.fancyprivatemines.block.toBlockData
-import me.bristermitten.fancyprivatemines.component.blocks.schematic.scanner.MiningRegionAreaScanner
+import me.bristermitten.fancyprivatemines.component.blocks.schematic.scanner.MiningRegionSchematicScanner
 import me.bristermitten.fancyprivatemines.data.toChunkData
 import me.bristermitten.fancyprivatemines.util.VoidWorldGenerator
 import me.bristermitten.fancyprivatemines.util.center
@@ -28,14 +28,14 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
 
         findFreeLocation().thenAccept { location ->
             val region = paster.paste(schematic, location)
-            val miningAreas = MiningRegionAreaScanner().scan(region, true)
-            plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningAreas[0], miningAreas[1],
-                    BasicBlockMask(
-                            mapOf(
-                                    51.0 to Material.STONE.toBlockData(),
-                                    49.0 to Material.COBBLESTONE.toBlockData(),
-                            )
-                    ))
+//            val miningAreas = MiningRegionSchematicScanner().scan(region, true)
+//            plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningAreas[0], miningAreas[1],
+//                    BasicBlockMask(
+//                            mapOf(
+//                                    51.0 to Material.STONE.toBlockData(),
+//                                    49.0 to Material.COBBLESTONE.toBlockData(),
+//                            )
+//                    ))
             future.complete(
                     PrivateMine(owner.uniqueId, true, BasicBlockMask(mapOf(100.0 to Material.STONE.toBlockData())), 0.0, location, region.min, region.max)
             )
