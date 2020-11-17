@@ -2,12 +2,13 @@ package me.bristermitten.fancyprivatemines.component.blocks.schematic.scanner
 
 import me.bristermitten.fancyprivatemines.component.blocks.schematic.Schematic
 import me.bristermitten.fancyprivatemines.component.blocks.schematic.meta.SchematicMetadata
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.Block
 
 class MiningRegionSchematicScanner(val compareTo: Material) : SchematicScanner {
 
-    override fun process(block: Block, schematic: Schematic, meta: SchematicMetadata) {
+    override fun process(block: Block, origin: Location, schematic: Schematic, meta: SchematicMetadata) {
         if (block.type != compareTo) {
             return
         }

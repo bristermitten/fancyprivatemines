@@ -12,7 +12,7 @@ class SchematicMetaSearcher(private val scanners: List<SchematicScanner>) {
                 .forEach { loc ->
                     val block = loc.block
                     scanners.forEach {
-                        it.process(block, schematic, metadata)
+                        it.process(block, TODO(), schematic, metadata)
                     }
                 }
 
