@@ -2,12 +2,12 @@ package me.bristermitten.fancyprivatemines
 
 import me.bristermitten.fancyprivatemines.command.FancyPrivateMinesCommand
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
-import me.bristermitten.fancyprivatemines.component.blocks.schematic.paster.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
 import me.bristermitten.fancyprivatemines.mine.PrivateMineStorage
+import me.bristermitten.fancyprivatemines.schematic.paster.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
@@ -21,9 +21,11 @@ class FancyPrivateMines : JavaPlugin() {
     @Suppress("MemberVisibilityCanBePrivate")
     val blockSettingComponent = BlockSettingComponent()
     val langComponent = LangComponent()
-    val schematicPasterComponent = SchematicPasterComponent()
+    val pastingComponent = SchematicPasterComponent()
 
     val storage = PrivateMineStorage()
+
+    val schematicsDir = dataFolder.resolve("schematics/")
 
     override fun onEnable() {
         loadConfig()
@@ -31,6 +33,8 @@ class FancyPrivateMines : JavaPlugin() {
         loadComponents()
 
         loadCommands()
+
+        schematicsDir.mkdir()
     }
 
     private fun loadConfig() {
@@ -62,7 +66,7 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.init(this)
         langComponent.init(this)
-        schematicPasterComponent.init(this)
+        pastingComponent.init(this)
 
         logger.info { "Components Loaded" }
     }
@@ -72,7 +76,7 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.reload(this)
         langComponent.reload(this)
-        schematicPasterComponent.reload(this)
+        pastingComponent.reload(this)
 
         logger.info { "Components Reloaded" }
     }
@@ -83,7 +87,7 @@ class FancyPrivateMines : JavaPlugin() {
 
         blockSettingComponent.destroy(this)
         langComponent.destroy(this)
-        schematicPasterComponent.destroy(this)
+        pastingComponent.destroy(this)
 
         logger.info { "Components Unloaded" }
     }

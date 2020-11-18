@@ -2,9 +2,10 @@ package me.bristermitten.fancyprivatemines.hook.fawe
 
 import com.sk89q.worldedit.bukkit.BukkitWorld
 import com.sk89q.worldedit.extent.clipboard.ClipboardFormats
-import me.bristermitten.fancyprivatemines.component.blocks.schematic.paster.SchematicPaster
+import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.data.makeRegion
+import me.bristermitten.fancyprivatemines.schematic.paster.SchematicPaster
 import org.bukkit.Location
 import java.io.File
 

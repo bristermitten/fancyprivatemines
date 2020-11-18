@@ -1,0 +1,8 @@
+name: Test Schematic
+fileName: test.schematic
+hash: 1787652d796189c4474113fb49d27209531d9765f6d350a2cb7c284168672bba
+metadata: {
+    miningLocations: [[1, 5, 6], 10, 18, 3]
+    spawnLocation: [2, 6, 3]
+    npcSpawnLocation: [9, 10, 22]
+}

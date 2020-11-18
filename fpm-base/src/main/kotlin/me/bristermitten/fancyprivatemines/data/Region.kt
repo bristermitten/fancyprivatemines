@@ -5,9 +5,10 @@ import org.bukkit.Location
 import kotlin.math.max
 import kotlin.math.min
 
-class Region(private val minPoint: Location, private val maxPoint: Location) {
+class Region(private val minPoint: Location, private val maxPoint: Location, private val originPoint: Location = minPoint) {
     val min get() = minPoint.clone()
     val max get() = maxPoint.clone()
+    val origin get() = originPoint.clone()
     //Whoever decided to make Location mutable is now my arch enemy
 
     val points: List<Location>

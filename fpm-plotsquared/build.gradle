@@ -4,6 +4,6 @@ repositories {
 
 dependencies {
     compileOnly project(':fpm-base')
-    implementation "com.plotsquared:PlotSquared-Core:5.13.3"
-    implementation("com.plotsquared:PlotSquared-Bukkit:5.13.3") { transitive = false }
+    compileOnly "com.plotsquared:PlotSquared-Core:5.13.3"
+    compileOnly("com.plotsquared:PlotSquared-Bukkit:5.13.3") { transitive = false }
 }

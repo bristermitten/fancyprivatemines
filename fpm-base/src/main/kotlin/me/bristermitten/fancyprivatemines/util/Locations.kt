@@ -5,7 +5,7 @@ import java.util.*
 import kotlin.math.abs
 
 infix fun Location.areaTo(other: Location): List<Location> {
-    //We may be appending a huge amount here, so don't want to constantly be resizing the array
+    //We may be appending a huge amount here, so don't want to constantly be resizing an array
     val blocks = LinkedList<Location>()
     val diffX = abs(blockX - other.blockX)
     val diffY = abs(blockY - other.blockY)
