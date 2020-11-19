@@ -14,7 +14,6 @@ class CreateSubCommand(val plugin: FancyPrivateMines) : SubCommand(
 ) {
     override fun exec(sender: CommandSender, args: Array<String>) {
         plugin.langComponent.message(sender, Info.GeneratingMine)
-        val start = System.currentTimeMillis().toDouble()
         val voidWorldMineFactory = VoidWorldMineFactory(plugin)
         val schematicFile = plugin.schematicsDir.resolve("paste1.schematic")
         val loader = SchematicLoader(plugin)
@@ -23,11 +22,8 @@ class CreateSubCommand(val plugin: FancyPrivateMines) : SubCommand(
                 loader.loadSchematic(schematicFile),
                 sender as Player)
 
-        mine.whenComplete { t, u ->
-            u?.printStackTrace()
+        mine.whenComplete { t, _ ->
             sender.teleport(t.spawnLocation)
-            val took = System.currentTimeMillis() - start
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aPasted in $took ms!"))
         }
     }
 }

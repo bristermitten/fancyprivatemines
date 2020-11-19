@@ -28,25 +28,16 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
             }
 
     override fun create(schematicFile: File, mineSchematic: MineSchematic, owner: Player): CompletableFuture<PrivateMine> {
-        var start = now()
         val future = CompletableFuture<PrivateMine>()
         val paster = plugin.configuration.schematicPasters.active
 
         findFreeLocation().thenAccept { location ->
-            println("Found free location in ${timeSince(start)}ms")
-            start = now()
             try {
-                plugin.logger.fpmDebug { "Found Free Location $location" }
                 val region = paster.paste(schematicFile, location)
-                plugin.logger.fpmDebug { "Pasted $schematicFile at $location in ${timeSince(start)}ms" }
-                start = now()
 
                 val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
                 val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
                 plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
-
-                plugin.logger.fpmDebug { "Scanned region in ${timeSince(start)}ms" }
-                start = now()
 
                 val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
                         .map { it.toLocation(region.origin) }
@@ -60,8 +51,6 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                         RandomBlockMask(
                                 mapOf(49.0 to Material.STONE.toBlockData(), 51.0 to Material.COAL_ORE.toBlockData())
                         ))
-
-                plugin.logger.fpmDebug { "Filled mineable area $miningRegionPoints in ${timeSince(start)}ms" }
 
                 future.complete(PrivateMine(
                         owner.uniqueId,
