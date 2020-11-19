@@ -2,8 +2,10 @@ package me.bristermitten.fancyprivatemines.command.subcommand
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.lang.key.Info
+import me.bristermitten.fancyprivatemines.menu.MineMenu
 import me.bristermitten.fancyprivatemines.mine.VoidWorldMineFactory
 import me.bristermitten.fancyprivatemines.schematic.SchematicLoader
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -24,6 +26,11 @@ class CreateSubCommand(val plugin: FancyPrivateMines) : SubCommand(
 
         mine.whenComplete { t, _ ->
             sender.teleport(t.spawnLocation)
+
+            Bukkit.getScheduler().runTaskLater(plugin, {
+                MineMenu(plugin, sender, t).open()
+            }, 20L)
+
         }
     }
 }

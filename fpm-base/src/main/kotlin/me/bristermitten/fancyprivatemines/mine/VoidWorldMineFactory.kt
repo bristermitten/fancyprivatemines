@@ -3,9 +3,10 @@ package me.bristermitten.fancyprivatemines.mine
 import io.papermc.lib.PaperLib
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockData
-import me.bristermitten.fancyprivatemines.block.RandomBlockMask
+import me.bristermitten.fancyprivatemines.block.FractionalBlockMask
 import me.bristermitten.fancyprivatemines.block.toBlockData
 import me.bristermitten.fancyprivatemines.block.toBlockMask
+import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.data.toChunkData
 import me.bristermitten.fancyprivatemines.schematic.LocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.MineSchematic
@@ -33,39 +34,43 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
         val paster = plugin.configuration.schematicPasters.active
 
         findFreeLocation().thenAccept { location ->
-            val region = paster.paste(schematicFile, location)
+            try {
+                val region = paster.paste(schematicFile, location)
 
-            val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-            val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
-            plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
+                val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
+                val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
+                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
 
-            val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
-                    .map { it.toLocation(region.origin) }
+                val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
+                        .map { it.toLocation(region.origin) }
 
-            val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
-                    .toLocation(region.origin)
+                val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
+                        .toLocation(region.origin)
 
-            plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
+                plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
 
-            val mask = RandomBlockMask(
-                    mapOf(
-                            Material.STONE.toBlockData() to 100.0 / 3,
-                            Material.COAL_ORE.toBlockData() to 100.0 / 3,
-                            Material.COAL_BLOCK.toBlockData() to 100.0 / 3,
-                    )
-            )
-            plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
-                    mask)
+                val mask = FractionalBlockMask(
+                        listOf(
+                                Material.STONE.toBlockData().toBlockMask(),
+                                Material.COAL_ORE.toBlockData().toBlockMask(),
+                                Material.COAL_BLOCK.toBlockData().toBlockMask(),
+                        )
+                )
+                plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
+                        mask)
 
-            future.complete(PrivateMine(
-                    owner.uniqueId,
-                    true,
-                    mask,
-                    0.0,
-                    spawnpoint,
-                    region.min,
-                    region.max
-            ))
+                future.complete(PrivateMine(
+                        owner.uniqueId,
+                        true,
+                        mask,
+                        0.0,
+                        spawnpoint,
+                        region,
+                        Region(miningRegionPoints[0], miningRegionPoints[1])
+                ))
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
 
         return future
