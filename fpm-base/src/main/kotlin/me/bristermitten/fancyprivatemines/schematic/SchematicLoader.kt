@@ -50,4 +50,12 @@ class SchematicLoader(private val plugin: FancyPrivateMines) {
 
         return schematic
     }
+
+    fun saveSchematic(schematic: MineSchematic) {
+        val file = plugin.schematicsDir.resolve(schematic.fileName)
+        val metaFileName = metaFormat.format(file.name)
+        val metaFile = file.parentFile.resolve(metaFileName)
+
+        metaFile.writeText(json.encodeToString(schematic))
+    }
 }
