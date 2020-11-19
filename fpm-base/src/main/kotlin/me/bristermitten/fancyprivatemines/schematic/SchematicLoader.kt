@@ -16,7 +16,7 @@ class SchematicLoader(private val plugin: FancyPrivateMines) {
     private val metaFormat = "%s.metadata"
 
     fun loadSchematic(file: File): MineSchematic {
-        val metaFileName = metaFormat.format(file.name)
+        val metaFileName = metaFormat.format(file.nameWithoutExtension)
         val metaFile = file.parentFile.resolve(metaFileName)
 
         val hash = file.readBytes().sha256Hash()

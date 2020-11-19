@@ -3,7 +3,7 @@ package me.bristermitten.fancyprivatemines.block
 import java.util.*
 import kotlin.streams.toList
 
-class BasicBlockMask(
+class RandomBlockMask(
         probabilities: Map<Double, BlockData>,
         private val random: SplittableRandom = SplittableRandom()
 ) : BlockMask {

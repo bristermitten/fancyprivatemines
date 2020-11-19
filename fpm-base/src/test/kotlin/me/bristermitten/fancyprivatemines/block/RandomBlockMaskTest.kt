@@ -7,11 +7,10 @@ import org.bukkit.Material.COBBLESTONE
 import org.bukkit.Material.STONE
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
-import sun.misc.Unsafe
 import kotlin.math.roundToInt
 
-internal class BasicBlockMaskTest {
-    private val mask = BasicBlockMask(
+internal class RandomBlockMaskTest {
+    private val mask = RandomBlockMask(
             mapOf(
                     30.0 to BlockData(STONE),
                     70.0 to BlockData(COBBLESTONE),

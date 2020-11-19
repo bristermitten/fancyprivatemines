@@ -14,15 +14,7 @@ class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod
     override val id: String = "FAWE"
     override val priority: Int = 5 //FAWE is the highest speed, so will be prioritised
 
-    private val sessionCache = WeakHashMap<World, EditSession>()
 
-    private val World.editSession
-        get() = sessionCache.getOrPut(this) {
-            EditSessionBuilder(this.name)
-                    .allowedRegionsEverywhere()
-                    .fastmode(true)
-                    .build()
-        }
 
     override fun setBlock(location: Location, data: BlockMask) {
 

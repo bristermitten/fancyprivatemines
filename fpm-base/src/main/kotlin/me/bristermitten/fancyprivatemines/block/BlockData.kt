@@ -5,3 +5,5 @@ import org.bukkit.Material
 data class BlockData(val material: Material, val data: Byte = 0)
 
 fun Material.toBlockData() = BlockData(this)
+
+fun BlockData.toBlockMask() = SimpleBlockMask(this)

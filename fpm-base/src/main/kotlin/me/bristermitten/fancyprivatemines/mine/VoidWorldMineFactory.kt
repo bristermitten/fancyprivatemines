@@ -2,16 +2,17 @@ package me.bristermitten.fancyprivatemines.mine
 
 import io.papermc.lib.PaperLib
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.block.BasicBlockMask
+import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.block.RandomBlockMask
 import me.bristermitten.fancyprivatemines.block.toBlockData
+import me.bristermitten.fancyprivatemines.block.toBlockMask
 import me.bristermitten.fancyprivatemines.data.toChunkData
+import me.bristermitten.fancyprivatemines.schematic.LocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.MineSchematic
 import me.bristermitten.fancyprivatemines.schematic.MultipleLocationAttributeValue
-import me.bristermitten.fancyprivatemines.schematic.SchematicScanner
 import me.bristermitten.fancyprivatemines.schematic.attributes.MiningRegionScanner
-import me.bristermitten.fancyprivatemines.util.VoidWorldGenerator
-import me.bristermitten.fancyprivatemines.util.center
-import me.bristermitten.fancyprivatemines.util.fpmDebug
+import me.bristermitten.fancyprivatemines.schematic.attributes.SpawnPointScanner
+import me.bristermitten.fancyprivatemines.util.*
 import org.bukkit.*
 import org.bukkit.entity.Player
 import java.io.File
@@ -27,32 +28,50 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
             }
 
     override fun create(schematicFile: File, mineSchematic: MineSchematic, owner: Player): CompletableFuture<PrivateMine> {
+        var start = now()
         val future = CompletableFuture<PrivateMine>()
         val paster = plugin.configuration.schematicPasters.active
 
         findFreeLocation().thenAccept { location ->
+            println("Found free location in ${timeSince(start)}ms")
+            start = now()
             try {
                 plugin.logger.fpmDebug { "Found Free Location $location" }
                 val region = paster.paste(schematicFile, location)
-                plugin.logger.fpmDebug { "Pasted $schematicFile at $location" }
+                plugin.logger.fpmDebug { "Pasted $schematicFile at $location in ${timeSince(start)}ms" }
+                start = now()
 
                 val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner))
+                val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
+                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
 
-                plugin.logger.fpmDebug { "Scanned region" }
+                plugin.logger.fpmDebug { "Scanned region in ${timeSince(start)}ms" }
+                start = now()
+
                 val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
                         .map { it.toLocation(region.origin) }
 
+                val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
+                        .toLocation(region.origin)
+
+                plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
+
                 plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
-                        BasicBlockMask(
-                                mapOf(49.0 to Material.STONE.toBlockData(), 51.0 to Material.STONE.toBlockData())
+                        RandomBlockMask(
+                                mapOf(49.0 to Material.STONE.toBlockData(), 51.0 to Material.COAL_ORE.toBlockData())
                         ))
 
-                plugin.logger.fpmDebug { "Filled mineable area $miningRegionPoints" }
+                plugin.logger.fpmDebug { "Filled mineable area $miningRegionPoints in ${timeSince(start)}ms" }
 
-                future.complete(
-                        PrivateMine(owner.uniqueId, true, BasicBlockMask(mapOf(100.0 to Material.STONE.toBlockData())), 0.0, location, region.min, region.max)
-                )
+                future.complete(PrivateMine(
+                        owner.uniqueId,
+                        true,
+                        RandomBlockMask(mapOf(100.0 to Material.STONE.toBlockData())),
+                        0.0,
+                        spawnpoint,
+                        region.min,
+                        region.max
+                ))
             } catch (e: Throwable) {
                 e.printStackTrace()
             }
