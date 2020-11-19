@@ -7,6 +7,8 @@ import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
 import me.bristermitten.fancyprivatemines.mine.PrivateMineStorage
+import me.bristermitten.fancyprivatemines.schematic.SchematicLoader
+import me.bristermitten.fancyprivatemines.schematic.SchematicScanner
 import me.bristermitten.fancyprivatemines.schematic.paster.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
@@ -26,6 +28,8 @@ class FancyPrivateMines : JavaPlugin() {
     val storage = PrivateMineStorage()
 
     val schematicsDir = dataFolder.resolve("schematics/")
+    val schematicLoader = SchematicLoader(this)
+    val schematicScanner = SchematicScanner(this, schematicLoader)
 
     override fun onEnable() {
         loadConfig()

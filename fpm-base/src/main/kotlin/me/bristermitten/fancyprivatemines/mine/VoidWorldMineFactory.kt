@@ -37,7 +37,7 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                 plugin.logger.fpmDebug { "Pasted $schematicFile at $location" }
 
                 val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-                SchematicScanner().scan(region, mineSchematic, listOf(miningRegionScanner))
+                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner))
 
                 plugin.logger.fpmDebug { "Scanned region" }
                 val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
