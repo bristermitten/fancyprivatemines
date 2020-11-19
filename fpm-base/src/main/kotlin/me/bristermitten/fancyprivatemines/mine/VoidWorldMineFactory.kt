@@ -12,7 +12,8 @@ import me.bristermitten.fancyprivatemines.schematic.MineSchematic
 import me.bristermitten.fancyprivatemines.schematic.MultipleLocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.attributes.MiningRegionScanner
 import me.bristermitten.fancyprivatemines.schematic.attributes.SpawnPointScanner
-import me.bristermitten.fancyprivatemines.util.*
+import me.bristermitten.fancyprivatemines.util.VoidWorldGenerator
+import me.bristermitten.fancyprivatemines.util.center
 import org.bukkit.*
 import org.bukkit.entity.Player
 import java.io.File
@@ -47,15 +48,20 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
 
                 plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
 
+                val mask = RandomBlockMask(
+                        mapOf(
+                                Material.STONE.toBlockData() to 100.0 / 3,
+                                Material.COAL_ORE.toBlockData() to 100.0 / 3,
+                                Material.COAL_BLOCK.toBlockData() to 100.0 / 3,
+                        )
+                )
                 plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
-                        RandomBlockMask(
-                                mapOf(49.0 to Material.STONE.toBlockData(), 51.0 to Material.COAL_ORE.toBlockData())
-                        ))
+                        mask)
 
                 future.complete(PrivateMine(
                         owner.uniqueId,
                         true,
-                        RandomBlockMask(mapOf(100.0 to Material.STONE.toBlockData())),
+                        mask,
                         0.0,
                         spawnpoint,
                         region.min,

@@ -4,17 +4,17 @@ import java.util.*
 import kotlin.streams.toList
 
 class RandomBlockMask(
-        probabilities: Map<Double, BlockData>,
+        probabilities: Map<BlockData, Double>,
         private val random: SplittableRandom = SplittableRandom()
 ) : BlockMask {
 
-    private val probabilities = run {
+    private val probabilityMap = run {
         val map = TreeMap<Double, BlockData>()
 
         var total = 0.0
         probabilities.forEach {
-            map[it.key + total] = it.value
-            total += it.key
+            map[it.value + total] = it.key
+            total += it.value
         }
 
         if (total != 100.0) {
@@ -24,10 +24,10 @@ class RandomBlockMask(
         map
     }
 
-    val percentageProbabilities = TreeMap(probabilities)
+    val percentageProbabilities = probabilities.toMap()
 
     private val sum by lazy {
-        probabilities.keys.sum()
+        probabilities.values.sum()
     }
 
     init {
@@ -39,9 +39,8 @@ class RandomBlockMask(
     override fun generate(): BlockData {
         val threshold = random.nextDouble(sum)
         try {
-            return probabilities.ceilingEntry(threshold).value
+            return probabilityMap.ceilingEntry(threshold).value
         } catch (e: Exception) {
-            println(threshold)
             throw e
         }
     }
@@ -50,7 +49,7 @@ class RandomBlockMask(
         return random.doubles(amount.toLong(), 0.0, sum)
                 .parallel()
                 .mapToObj {
-                    probabilities.ceilingEntry(it).value
+                    probabilityMap.ceilingEntry(it).value
                 }.filter(Objects::nonNull)
                 .toList()
     }
