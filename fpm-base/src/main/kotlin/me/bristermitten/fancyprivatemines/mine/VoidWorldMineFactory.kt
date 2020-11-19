@@ -33,43 +33,39 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
         val paster = plugin.configuration.schematicPasters.active
 
         findFreeLocation().thenAccept { location ->
-            try {
-                val region = paster.paste(schematicFile, location)
+            val region = paster.paste(schematicFile, location)
 
-                val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-                val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
-                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
+            val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
+            val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
+            plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
 
-                val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
-                        .map { it.toLocation(region.origin) }
+            val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
+                    .map { it.toLocation(region.origin) }
 
-                val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
-                        .toLocation(region.origin)
+            val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
+                    .toLocation(region.origin)
 
-                plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
+            plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
 
-                val mask = RandomBlockMask(
-                        mapOf(
-                                Material.STONE.toBlockData() to 100.0 / 3,
-                                Material.COAL_ORE.toBlockData() to 100.0 / 3,
-                                Material.COAL_BLOCK.toBlockData() to 100.0 / 3,
-                        )
-                )
-                plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
-                        mask)
+            val mask = RandomBlockMask(
+                    mapOf(
+                            Material.STONE.toBlockData() to 100.0 / 3,
+                            Material.COAL_ORE.toBlockData() to 100.0 / 3,
+                            Material.COAL_BLOCK.toBlockData() to 100.0 / 3,
+                    )
+            )
+            plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
+                    mask)
 
-                future.complete(PrivateMine(
-                        owner.uniqueId,
-                        true,
-                        mask,
-                        0.0,
-                        spawnpoint,
-                        region.min,
-                        region.max
-                ))
-            } catch (e: Throwable) {
-                e.printStackTrace()
-            }
+            future.complete(PrivateMine(
+                    owner.uniqueId,
+                    true,
+                    mask,
+                    0.0,
+                    spawnpoint,
+                    region.min,
+                    region.max
+            ))
         }
 
         return future
