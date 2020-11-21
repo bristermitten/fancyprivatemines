@@ -17,7 +17,7 @@ class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
         args.lengthMustBeAtLeast(1)
 
         val mine = args[0].getPrivateMine()
-        MineMenu(plugin, sender, mine).open()
+        MineMenu(plugin).open(sender, mine)
     }
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
