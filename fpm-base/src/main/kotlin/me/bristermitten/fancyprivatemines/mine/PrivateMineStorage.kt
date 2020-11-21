@@ -9,11 +9,8 @@ import java.util.*
 
 class PrivateMineStorage(private val plugin: FancyPrivateMines) {
 
-    /*
-    At the moment, a mine could either be
-    1) placed in a plot
-    2) summoned in a privatemines world
-     */
+    val all
+        get() = minesById.values.toSet()
 
     private val minesByChunk = mutableMapOf<ChunkData, UUID>()
     private val minesById = mutableMapOf<UUID, PrivateMine>()

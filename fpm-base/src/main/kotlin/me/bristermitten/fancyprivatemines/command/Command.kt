@@ -1,11 +1,13 @@
 package me.bristermitten.fancyprivatemines.command
 
+import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.command.subcommand.SubCommand
+import net.kyori.adventure.text.minimessage.fancy.Fancy
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 
-abstract class Command : TabExecutor {
+abstract class Command(private val plugin: FancyPrivateMines) : TabExecutor {
 
     protected val subCommandMap = mutableMapOf<String, SubCommand>()
 
@@ -30,7 +32,12 @@ abstract class Command : TabExecutor {
             return true
         }
 
-        subCommand.exec(sender, args.drop(1).toTypedArray())
+        try {
+            subCommand.exec(sender, args.drop(1).toTypedArray())
+        } catch (reqFailed: CommandRequirementNotSatisfiedException) {
+            plugin.langComponent.message(sender, reqFailed.langKey, *reqFailed.placeholders)
+            return true
+        }
         return true
     }
 
@@ -53,7 +60,8 @@ abstract class Command : TabExecutor {
                     .toList()
         }
 
-        return emptyList() //TODO
+        val subCommand = subCommandMap[args[0].toLowerCase()] ?: return emptyList()
+        return subCommand.tabComplete(sender, args.drop(1))
     }
 
     protected abstract fun CommandSender.sendUnknownCommand(cmd: String)

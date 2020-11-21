@@ -62,6 +62,7 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                 val mine = PrivateMine(
                         UUID.randomUUID(),
                         owner.uniqueId,
+                        null,
                         true,
                         mask,
                         0.0,

@@ -14,6 +14,7 @@ data class PrivateMine(
         val id: UUID = UUID.randomUUID(),
         @Serializable(with = UUIDSerializer::class)
         val owner: UUID,
+        var name: String?,
         var open: Boolean = true,
         var blocks: BlockMask,
         var taxPercentage: Double,

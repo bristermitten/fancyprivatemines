@@ -7,6 +7,10 @@ Colors:
 Errors:
   UnknownCommand: '<error>Unknown Command. Type <secondary><hover:show_text:"/fpm help"><click:run_command:/fpm help>/fpm help<error> for help'
   NoPermission: '<error>You need permission <secondary>%permission%<error> to run this command.'
+  MustBePlayer: '<error>Only players can run this command.'
+  NotEnoughArguments: '<error>Not enough arguments. Required: %args_required%, actual: %args_length%.'
+  TooManyArguments: '<error>Too many arguments. Required: %args_required%, actual: %args_length%.'
+  WrongArgsLength: '<error>Wrong args length. Required: %args_required%, actual: %args_length%.'
 
 Command:
   Help:

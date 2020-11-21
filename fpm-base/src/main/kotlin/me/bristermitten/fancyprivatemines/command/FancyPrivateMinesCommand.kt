@@ -9,10 +9,10 @@ import me.bristermitten.fancyprivatemines.lang.key.Commands
 import me.bristermitten.fancyprivatemines.lang.key.Errors
 import org.bukkit.command.CommandSender
 
-class FancyPrivateMinesCommand(val plugin: FancyPrivateMines) : Command() {
+class FancyPrivateMinesCommand(val plugin: FancyPrivateMines) : Command(plugin) {
 
     init {
-        addSubCommand("list", ListPrivateMinesSubCommand())
+        addSubCommand("list", ListPrivateMinesSubCommand(plugin))
         addSubCommand("reload", ReloadSubCommand(plugin))
         addSubCommand("create", CreateSubCommand(plugin))
         addSubCommand("menu", MenuSubCommand(plugin))
