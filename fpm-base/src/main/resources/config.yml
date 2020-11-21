@@ -27,3 +27,9 @@ PlacementItem:
   Owner: '%player%' #This will be the player's head
 
 MineWorld: "privatemines"
+
+# Options:
+# JSON - JSON based data storage. Human readable, but uses more space
+# JSON - CBOR based data storage. Not human readable, but very space efficient
+# CBOR is recommended as most of the time editing data files can lead to issues
+DataFormat: 'CBOR'

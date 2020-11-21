@@ -1,8 +1,9 @@
 package me.bristermitten.fancyprivatemines.block
 
+import kotlinx.serialization.Serializable
 import org.bukkit.Material
 
-data class BlockData(val material: Material, val data: Byte = 0)
+@Serializable data class BlockData(val material: Material, val data: Byte = 0)
 
 fun Material.toBlockData() = BlockData(this)
 

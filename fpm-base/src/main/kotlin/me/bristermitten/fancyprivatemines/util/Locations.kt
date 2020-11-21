@@ -1,23 +1,26 @@
 package me.bristermitten.fancyprivatemines.util
 
+import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import org.bukkit.Location
 import java.util.*
 import kotlin.math.abs
 
-infix fun Location.areaTo(other: Location): List<Location> {
+//Parallelise this?
+infix fun ImmutableLocation.areaTo(other: ImmutableLocation): List<ImmutableLocation> {
     //We may be appending a huge amount here, so don't want to constantly be resizing an array
-    val blocks = LinkedList<Location>()
-    val diffX = abs(blockX - other.blockX)
-    val diffY = abs(blockY - other.blockY)
-    val diffZ = abs(blockZ - other.blockZ)
+    val blocks = LinkedList<ImmutableLocation>()
+    val diffX = abs(x - other.x).toInt()
+    val diffY = abs(y - other.y).toInt()
+    val diffZ = abs(z - other.z).toInt()
 
     for (x in (0..diffX)) {
         for (y in (0..diffY)) {
             for (z in (0..diffZ)) {
-                blocks += clone().add(x.toDouble(), y.toDouble(), z.toDouble())
+                blocks += add(x.toDouble(), y.toDouble(), z.toDouble())
             }
         }
     }
     return blocks
 }
+
 

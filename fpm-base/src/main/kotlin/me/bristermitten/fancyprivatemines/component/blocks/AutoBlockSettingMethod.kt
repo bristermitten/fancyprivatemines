@@ -2,6 +2,8 @@ package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockMask
+import me.bristermitten.fancyprivatemines.data.ImmutableLocation
+import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import org.bukkit.Location
 
@@ -40,9 +42,9 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
         plugin.configuration.blockSetting.methods.active = maxByOrNull.also { it.init() }
     }
 
-    override fun setBlock(location: Location, data: BlockMask) = notAllowed()
+    override fun setBlock(location: ImmutableLocation, data: BlockMask) = notAllowed()
 
-    override fun setBlocksBulk(pos1: Location, pos2: Location, mask: BlockMask) = notAllowed()
+    override fun setBlocksBulk(region: Region, mask: BlockMask) = notAllowed()
 
     override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) = notAllowed()
 

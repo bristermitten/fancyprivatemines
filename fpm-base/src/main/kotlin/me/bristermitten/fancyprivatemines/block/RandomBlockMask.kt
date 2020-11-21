@@ -1,12 +1,14 @@
 package me.bristermitten.fancyprivatemines.block
 
+import kotlinx.serialization.Serializable
 import java.util.*
 import kotlin.streams.toList
 
+@Serializable(with = RandomBlockMaskSerializer::class)
 class RandomBlockMask(
         probabilities: Map<BlockData, Double>,
-        private val random: SplittableRandom = SplittableRandom()
 ) : BlockMask {
+    private val random = SplittableRandom()
 
     private val probabilityMap = run {
         val map = TreeMap<Double, BlockData>()

@@ -1,16 +1,17 @@
 package me.bristermitten.fancyprivatemines.schematic.attributes
 
 import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
+import me.bristermitten.fancyprivatemines.data.RelativeLocation
 import me.bristermitten.fancyprivatemines.data.relativeTo
 import me.bristermitten.fancyprivatemines.schematic.LocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.MineSchematic
-import org.bukkit.Location
 
-class SpawnPointScanner(val compareTo: BlockData) : SchematicAttributeScanner {
+class SpawnPointScanner(val compareTo: BlockData) : SchematicAttributeScanner<LocationAttributeValue> {
     override val attributesKey = "spawnPoint"
 
-    override fun scan(block: BlockData, location: Location, region: Region, schematic: MineSchematic) {
+    override fun scan(block: BlockData, location: ImmutableLocation, region: Region, schematic: MineSchematic) {
         if (block.material != compareTo.material || block.data != compareTo.data) {
             return
         }
@@ -20,8 +21,8 @@ class SpawnPointScanner(val compareTo: BlockData) : SchematicAttributeScanner {
     }
 
     override fun validate(schematic: MineSchematic) {
-        val spawnpoint = schematic.attributes.data[attributesKey]
-        requireNotNull(spawnpoint) { "Schematic has no spawn point" }
-        require(spawnpoint is LocationAttributeValue) { "spawnPoint must be RelativeLocation" }
+        schematic.getAttribute<LocationAttributeValue, RelativeLocation>(attributesKey) {
+            throw IllegalStateException("Schematic has no spawn point")
+        }
     }
 }

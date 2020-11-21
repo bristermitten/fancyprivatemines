@@ -3,10 +3,9 @@ package me.bristermitten.fancyprivatemines.hook.fawe
 import com.boydti.fawe.FaweAPI
 import com.boydti.fawe.`object`.visitor.FastIterator
 import com.sk89q.worldedit.extent.clipboard.ClipboardFormats
-import com.sk89q.worldedit.function.operation.Operations
 import com.sk89q.worldedit.regions.CuboidRegion
-import com.sk89q.worldedit.session.ClipboardHolder
 import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.data.makeRegion
 import me.bristermitten.fancyprivatemines.schematic.paster.SchematicPaster
@@ -42,16 +41,16 @@ class FAWESchematicPaster : SchematicPaster() {
         val differential = position.subtract(clipboard.origin)
         region.shift(differential)
 
-        return makeRegion(region.minimumPoint.toLocation(at.world), region.maximumPoint.toLocation(at.world))
+        return makeRegion(region.minimumPoint.toLocation(at.world.name), region.maximumPoint.toLocation(at.world.name))
     }
 
-    override fun iterateRegion(region: Region, consumer: (Location, BlockData) -> Unit) {
+    override fun iterateRegion(region: Region, consumer: (ImmutableLocation, BlockData) -> Unit) {
         val world = region.min.world
 
-        val weWorld = FaweAPI.getWorld(world.name)
+        val weWorld = FaweAPI.getWorld(world)
         val weRegion = CuboidRegion(weWorld, region.min.toWorldEditVector(), region.max.toWorldEditVector())
 
-        val extent = world.editSession
+        val extent = region.min.bukkitWorld.editSession
         FastIterator(weRegion, extent).asSequence().map {
             val block = extent.getBlock(it)
             it.toLocation(world) to BlockData(Material.values()[block.type], block.data.toByte())

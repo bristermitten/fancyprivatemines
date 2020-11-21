@@ -1,9 +1,13 @@
 package me.bristermitten.fancyprivatemines.block
 
+import kotlinx.serialization.Serializable
+
+@Serializable(with = FractionalBlockMaskSerializer::class)
 class FractionalBlockMask(parts: List<BlockMask>? = null) : BlockMask {
     private val parts = parts?.toMutableList() ?: mutableListOf()
 
     val blockParts get() = parts.toList()
+
     fun add(mask: BlockMask) {
         parts += mask
     }
@@ -12,7 +16,10 @@ class FractionalBlockMask(parts: List<BlockMask>? = null) : BlockMask {
         return parts.count { it == mask }
     }
 
-    fun remove(mask: BlockMask) {
+    fun remove(mask: BlockMask, noRemove: Boolean = true) {
+        if (noRemove && count(mask) == 1) {
+            return
+        }
         parts -= mask
     }
 

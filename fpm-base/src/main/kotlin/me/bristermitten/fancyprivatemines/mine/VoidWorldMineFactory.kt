@@ -7,10 +7,9 @@ import me.bristermitten.fancyprivatemines.block.FractionalBlockMask
 import me.bristermitten.fancyprivatemines.block.toBlockData
 import me.bristermitten.fancyprivatemines.block.toBlockMask
 import me.bristermitten.fancyprivatemines.data.Region
+import me.bristermitten.fancyprivatemines.data.makeRegion
 import me.bristermitten.fancyprivatemines.data.toChunkData
-import me.bristermitten.fancyprivatemines.schematic.LocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.MineSchematic
-import me.bristermitten.fancyprivatemines.schematic.MultipleLocationAttributeValue
 import me.bristermitten.fancyprivatemines.schematic.attributes.MiningRegionScanner
 import me.bristermitten.fancyprivatemines.schematic.attributes.SpawnPointScanner
 import me.bristermitten.fancyprivatemines.util.VoidWorldGenerator
@@ -24,7 +23,9 @@ import java.util.concurrent.CompletableFuture
 class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory() {
     private val random = SplittableRandom()
 
-    private val world: World = Bukkit.createWorld(WorldCreator(plugin.pmConfig.mineWorld).generator(VoidWorldGenerator).generateStructures(false))
+    private val world: World = Bukkit.createWorld(
+            WorldCreator(plugin.pmConfig.mineWorld)
+                    .generator(VoidWorldGenerator).generateStructures(false))
             .apply {
                 difficulty = Difficulty.PEACEFUL
             }
@@ -38,16 +39,16 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                 val region = paster.paste(schematicFile, location)
 
                 val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-                val spawnpointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
-                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnpointScanner))
+                val spawnPointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
+                plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnPointScanner))
 
-                val miningRegionPoints = (mineSchematic.attributes.data[miningRegionScanner.attributesKey] as MultipleLocationAttributeValue).value
+                val miningRegionPoints = mineSchematic.getAttributeFor(miningRegionScanner)
                         .map { it.toLocation(region.origin) }
 
-                val spawnpoint = (mineSchematic.attributes.data[spawnpointScanner.attributesKey] as LocationAttributeValue).value
+                val spawnPoint = mineSchematic.getAttributeFor(spawnPointScanner)
                         .toLocation(region.origin)
 
-                plugin.configuration.blockSetting.methods.active.setBlock(spawnpoint, Material.AIR.toBlockData().toBlockMask())
+                plugin.configuration.blockSetting.methods.active.setBlock(spawnPoint, Material.AIR.toBlockData().toBlockMask())
 
                 val mask = FractionalBlockMask(
                         listOf(
@@ -56,18 +57,21 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                                 Material.COAL_BLOCK.toBlockData().toBlockMask(),
                         )
                 )
-                plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegionPoints[0], miningRegionPoints[1],
-                        mask)
+                plugin.configuration.blockSetting.methods.active.setBlocksBulk(makeRegion(miningRegionPoints[0], miningRegionPoints[1]), mask)
 
-                future.complete(PrivateMine(
+                val mine = PrivateMine(
+                        UUID.randomUUID(),
                         owner.uniqueId,
                         true,
                         mask,
                         0.0,
-                        spawnpoint,
+                        spawnPoint,
                         region,
                         Region(miningRegionPoints[0], miningRegionPoints[1])
-                ))
+                )
+
+                plugin.mineStorage.add(region.chunks, mine)
+                future.complete(mine)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -81,8 +85,8 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
         val x = random.nextInt(0, 5000)
         val z = random.nextInt(0, 5000)
 
-        return PaperLib.getChunkAtAsync(world, x, z, true).thenCompose {
-            if (plugin.storage.mines[it.toChunkData()] != null) {
+        return PaperLib.getChunkAtAsync(world, x, z, false).thenCompose {
+            if (plugin.mineStorage[it.toChunkData()] != null) {
                 findFreeLocation()
             } else {
                 CompletableFuture.completedFuture(it.center)

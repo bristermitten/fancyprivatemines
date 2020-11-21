@@ -25,12 +25,8 @@ class CreateSubCommand(val plugin: FancyPrivateMines) : SubCommand(
                 sender as Player)
 
         mine.whenComplete { t, _ ->
-            sender.teleport(t.spawnLocation)
 
-            Bukkit.getScheduler().runTaskLater(plugin, {
-                MineMenu(plugin, sender, t).open()
-            }, 20L)
-
+            sender.teleport(t.spawnLocation.toLocation())
         }
     }
 }

@@ -11,17 +11,12 @@ data class RelativeLocation(
         val dYaw: Float = 0f,
         val dPitch: Float = 0f,
 ) {
-    fun toLocation(base: Location): Location {
-        return base.clone()
-                .add(dx, dy, dz)
-                .apply {
-                    yaw += dYaw
-                    pitch += dPitch
-                }
+    fun toLocation(base: ImmutableLocation): ImmutableLocation {
+        return base.add(dx, dy, dz, dYaw, dPitch)
     }
 }
 
-infix fun Location.relativeTo(origin: Location): RelativeLocation {
+infix fun ImmutableLocation.relativeTo(origin: ImmutableLocation): RelativeLocation {
     return RelativeLocation(
             x - origin.x,
             y - origin.y,

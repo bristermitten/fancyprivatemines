@@ -1,5 +1,6 @@
 package me.bristermitten.fancyprivatemines.block
 
+
 interface BlockMask {
     fun generate(): BlockData
 

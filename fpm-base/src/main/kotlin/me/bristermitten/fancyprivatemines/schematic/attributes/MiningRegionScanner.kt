@@ -1,6 +1,7 @@
 package me.bristermitten.fancyprivatemines.schematic.attributes
 
 import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.data.relativeTo
 import me.bristermitten.fancyprivatemines.schematic.MineSchematic
@@ -8,10 +9,10 @@ import me.bristermitten.fancyprivatemines.schematic.MultipleLocationAttributeVal
 import org.bukkit.Location
 import org.bukkit.Material
 
-class MiningRegionScanner(val compareTo: Material) : SchematicAttributeScanner {
+class MiningRegionScanner(val compareTo: Material) : SchematicAttributeScanner<MultipleLocationAttributeValue> {
     override val attributesKey = "miningRegion"
 
-    override fun scan(block: BlockData, location: Location, region: Region, schematic: MineSchematic) {
+    override fun scan(block: BlockData, location: ImmutableLocation, region: Region, schematic: MineSchematic) {
         if (block.material != compareTo) {
             return
         }

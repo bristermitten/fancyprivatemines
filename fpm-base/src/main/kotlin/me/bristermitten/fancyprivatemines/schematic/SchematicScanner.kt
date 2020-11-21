@@ -9,7 +9,7 @@ import org.bukkit.Bukkit
 class SchematicScanner(private val plugin: FancyPrivateMines,
                        private val loader: SchematicLoader) {
 
-    fun scan(pastedRegion: Region, schematic: MineSchematic, scanners: List<SchematicAttributeScanner>) {
+    fun scan(pastedRegion: Region, schematic: MineSchematic, scanners: List<SchematicAttributeScanner<*>>) {
         val requireScanning = scanners.filter {
             schematic.attributes.data[it.attributesKey] == null
         }
@@ -20,8 +20,6 @@ class SchematicScanner(private val plugin: FancyPrivateMines,
                     it.scan(block, loc, pastedRegion, schematic)
                 }
             }
-        } else {
-            plugin.logger.fpmDebug { "Did not have to scan the region!" }
         }
 
         if (requireScanning.isNotEmpty()) {

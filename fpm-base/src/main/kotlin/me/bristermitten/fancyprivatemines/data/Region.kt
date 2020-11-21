@@ -1,38 +1,61 @@
 package me.bristermitten.fancyprivatemines.data
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import me.bristermitten.fancyprivatemines.util.areaTo
-import org.bukkit.Location
+import org.bukkit.Bukkit
+import org.bukkit.World
 import kotlin.math.max
 import kotlin.math.min
 
-class Region(private val minPoint: Location, private val maxPoint: Location, private val originPoint: Location = minPoint) {
-    val min get() = minPoint.clone()
-    val max get() = maxPoint.clone()
-    val origin get() = originPoint.clone()
-    //Whoever decided to make Location mutable is now my arch enemy
+@Serializable
+class Region(val min: ImmutableLocation, val max: ImmutableLocation) : Iterable<ImmutableLocation> {
+    @Transient
+    val origin = min //Can't have this in the constructor due to KTX.Serialization #133
 
-    val points: List<Location>
-        get() = minPoint areaTo maxPoint
+    init {
+        require(min.world == max.world && min.world == origin.world) {
+            "Worlds are not the same"
+        }
+    }
+
+    val world: World
+        get() = Bukkit.getWorld(min.world)
+
+    val points by lazy {
+        min areaTo max
+    }
+
+    val chunks by lazy {
+        points.map { it.chunkData }
+                .toSet()
+    }
+
+    override fun iterator(): Iterator<ImmutableLocation> {
+        return points.iterator()
+    }
 }
 
-fun makeRegion(point1: Location, point2: Location): Region {
+fun makeRegion(point1: ImmutableLocation, point2: ImmutableLocation): Region {
     require(point1.world == point2.world) {
         "Region spans 2 different worlds"
     }
 
     val world = point1.world
-    val min = Location(
+    val min = ImmutableLocation(
             world,
             min(point1.x, point2.x),
             min(point1.y, point2.y),
             min(point1.z, point2.z),
     )
-    val max = Location(
+
+    val max = ImmutableLocation(
             world,
             max(point1.x, point2.x),
             max(point1.y, point2.y),
             max(point1.z, point2.z),
     )
 
-    return Region(min.clone(), max.clone())
+    return Region(min, max)
 }
+
