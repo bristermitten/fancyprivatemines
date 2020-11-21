@@ -1,6 +1,7 @@
 package me.bristermitten.fancyprivatemines.command.subcommand
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
+import me.bristermitten.fancyprivatemines.command.getPrivateMine
 import me.bristermitten.fancyprivatemines.command.lengthMustBeAtLeast
 import me.bristermitten.fancyprivatemines.command.mustBePlayer
 import me.bristermitten.fancyprivatemines.menu.MineMenu
@@ -15,8 +16,7 @@ class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
         sender.mustBePlayer()
         args.lengthMustBeAtLeast(1)
 
-        val uuid = args[0].toLong()
-        val mine = plugin.mineStorage[uuid]!!
+        val mine = args[0].getPrivateMine()
         MineMenu(plugin, sender, mine).open()
     }
 

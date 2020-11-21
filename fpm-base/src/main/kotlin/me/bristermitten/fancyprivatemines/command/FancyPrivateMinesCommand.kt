@@ -1,10 +1,7 @@
 package me.bristermitten.fancyprivatemines.command
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.command.subcommand.CreateSubCommand
-import me.bristermitten.fancyprivatemines.command.subcommand.ListPrivateMinesSubCommand
-import me.bristermitten.fancyprivatemines.command.subcommand.MenuSubCommand
-import me.bristermitten.fancyprivatemines.command.subcommand.ReloadSubCommand
+import me.bristermitten.fancyprivatemines.command.subcommand.*
 import me.bristermitten.fancyprivatemines.lang.key.Commands
 import me.bristermitten.fancyprivatemines.lang.key.Errors
 import org.bukkit.command.CommandSender
@@ -16,6 +13,7 @@ class FancyPrivateMinesCommand(val plugin: FancyPrivateMines) : Command(plugin) 
         addSubCommand("reload", ReloadSubCommand(plugin))
         addSubCommand("create", CreateSubCommand(plugin))
         addSubCommand("menu", MenuSubCommand(plugin))
+        addSubCommand("rename", RenameSubCommand(plugin))
     }
 
     override fun CommandSender.sendUnknownCommand(cmd: String) {

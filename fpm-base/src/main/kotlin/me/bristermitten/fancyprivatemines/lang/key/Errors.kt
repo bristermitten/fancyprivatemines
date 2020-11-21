@@ -7,6 +7,7 @@ enum class Errors(private val messageKey: String? = null, override val default: 
     NotEnoughArgs("Not enough arguments."),
     TooManyArgs("Too many arguments."),
     WrongArgsLength("Wrong number of arguments."),
+    UnknownPrivateMine("Unknown PrivateMine."),
     NoPermission
     ;
 

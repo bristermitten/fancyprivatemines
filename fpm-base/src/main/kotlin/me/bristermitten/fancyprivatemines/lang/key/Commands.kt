@@ -6,6 +6,7 @@ enum class Commands(private val messageKey: String? = null, override val default
     HELP_COMMAND(default = "<primary>%cmd_name% - <secondary>%cmd_description%"),
     HELP_FOOTER(default = "<primary><bold> ============================"),
 
+    RENAME_SUCCESSFUL,
     RELOAD_DONE(default = "Reloaded!")
     ;
 

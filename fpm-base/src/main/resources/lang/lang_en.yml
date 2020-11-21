@@ -11,6 +11,7 @@ Errors:
   NotEnoughArguments: '<error>Not enough arguments. Required: %args_required%, actual: %args_length%.'
   TooManyArguments: '<error>Too many arguments. Required: %args_required%, actual: %args_length%.'
   WrongArgsLength: '<error>Wrong args length. Required: %args_required%, actual: %args_length%.'
+  UnknownPrivateMine: '<error>Unknown PrivateMine %arg%'
 
 Command:
   Help:
@@ -19,6 +20,8 @@ Command:
     Footer: "<primary><bold> ============================"
   Reload:
     Done: "<primary>Successfully reloaded!"
+  Rename:
+    Successful: "<primary>Renamed mine from <secondary>%previous_name% <primary>to <secondary>%new_name%<primary>!"
 
 Info:
   GeneratingMine: '<primary>Generating a new PrivateMine for you, please wait...'

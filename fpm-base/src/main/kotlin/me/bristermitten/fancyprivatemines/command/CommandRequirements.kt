@@ -1,9 +1,12 @@
 package me.bristermitten.fancyprivatemines.command
 
+import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.lang.key.Errors
 import me.bristermitten.fancyprivatemines.lang.key.LangKey
+import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
+import org.bukkit.plugin.java.JavaPlugin
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -46,6 +49,15 @@ internal infix fun Array<String>.lengthMustBeExactly(length: Int) {
                 ARGS_LEN_PLACEHOLDER, size.toString()
         )
     }
+}
+
+internal fun String.getPrivateMine(): PrivateMine {
+    val plugin = JavaPlugin.getPlugin(FancyPrivateMines::class.java) // static access :(
+
+    val id = this.toLongOrNull()
+    return id?.let { plugin.mineStorage[it] } //Search by id
+            ?: plugin.mineStorage[this] //Search by name
+            ?: throw CommandRequirementNotSatisfiedException(Errors.UnknownPrivateMine, "%arg%", this)
 }
 
 
