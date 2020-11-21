@@ -3,21 +3,19 @@ package me.bristermitten.fancyprivatemines.mine
 import kotlinx.serialization.Serializable
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.data.ChunkData
-import me.bristermitten.fancyprivatemines.serializer.UUIDSerializer
 import java.io.File
-import java.util.*
 
 class PrivateMineStorage(private val plugin: FancyPrivateMines) {
 
     val all
         get() = minesById.values.toSet()
 
-    private val minesByChunk = mutableMapOf<ChunkData, UUID>()
-    private val minesById = mutableMapOf<UUID, PrivateMine>()
+    private val minesByChunk = mutableMapOf<ChunkData, Long>()
+    private val minesById = mutableMapOf<Long, PrivateMine>()
 
     operator fun get(chunkData: ChunkData) = minesByChunk[chunkData]?.let { minesById[it] }
 
-    operator fun get(uuid: UUID) = minesById[uuid]
+    operator fun get(id: Long) = minesById[id]
 
     fun add(chunks: Collection<ChunkData>, mine: PrivateMine) {
         chunks.forEach {
@@ -47,8 +45,8 @@ class PrivateMineStorage(private val plugin: FancyPrivateMines) {
 
     @Serializable
     private data class Data(
-            val byChunk: Map<ChunkData, @Serializable(with = UUIDSerializer::class) UUID>,
-            val byId: Map<@Serializable(with = UUIDSerializer::class) UUID, PrivateMine>
+            val byChunk: Map<ChunkData, Long>,
+            val byId: Map<Long, PrivateMine>
     )
 
 }

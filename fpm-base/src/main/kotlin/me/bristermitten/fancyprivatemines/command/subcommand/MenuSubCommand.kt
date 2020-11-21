@@ -15,7 +15,7 @@ class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
         sender.mustBePlayer()
         args.lengthMustBeAtLeast(1)
 
-        val uuid = UUID.fromString(args[0])
+        val uuid = args[0].toLong()
         val mine = plugin.mineStorage[uuid]!!
         MineMenu(plugin, sender, mine).open()
     }

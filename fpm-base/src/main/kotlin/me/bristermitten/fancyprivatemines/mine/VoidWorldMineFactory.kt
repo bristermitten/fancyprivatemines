@@ -60,7 +60,7 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                 plugin.configuration.blockSetting.methods.active.setBlocksBulk(makeRegion(miningRegionPoints[0], miningRegionPoints[1]), mask)
 
                 val mine = PrivateMine(
-                        UUID.randomUUID(),
+                        PrivateMine.nextId,
                         owner.uniqueId,
                         null,
                         true,
