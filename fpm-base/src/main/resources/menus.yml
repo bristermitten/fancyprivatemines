@@ -1,0 +1,4 @@
+MineMenu-Main:
+  Title: "PrivateMine Management"
+  Type: CHEST # Will default to chest, but others might be supported
+  Size: 36 # Must be a multiple of 9

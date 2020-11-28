@@ -12,6 +12,7 @@ repositories {
     }
     mavenLocal()
 }
+
 dependencies {
     implementation 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
     implementation 'net.kyori:adventure-api:4.0.0-SNAPSHOT'
