@@ -6,19 +6,19 @@ import me.bristermitten.fancyprivatemines.command.lengthMustBeAtLeast
 import me.bristermitten.fancyprivatemines.command.mustBePlayer
 import me.bristermitten.fancyprivatemines.menu.MineMenu
 import org.bukkit.command.CommandSender
-import java.util.*
 
 class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
-        description = "Create a Mine",
-        "fpm.create"
+    description = "Create a Mine",
+    "fpm.create"
 ) {
     override fun exec(sender: CommandSender, args: Array<String>) {
         sender.mustBePlayer()
-        args.lengthMustBeAtLeast(1)
+        args lengthMustBeAtLeast 1
 
         val mine = args[0].getPrivateMine()
         MineMenu(plugin).open(sender, mine)
     }
+
 
     override fun tabComplete(sender: CommandSender, args: List<String>): List<String> {
         val all = plugin.mineStorage.all.map { it.name ?: it.id.toString() }
