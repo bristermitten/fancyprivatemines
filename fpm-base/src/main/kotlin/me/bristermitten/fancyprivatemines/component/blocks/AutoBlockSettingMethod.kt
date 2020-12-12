@@ -1,7 +1,7 @@
 package me.bristermitten.fancyprivatemines.component.blocks
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.block.BlockMask
+import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.util.fpmDebug
@@ -42,11 +42,11 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
         plugin.configuration.blockSetting.methods.active = maxByOrNull.also { it.init() }
     }
 
-    override fun setBlock(location: ImmutableLocation, data: BlockMask) = notAllowed()
+    override fun setBlock(location: ImmutableLocation, data: BlockPattern) = notAllowed()
 
-    override fun setBlocksBulk(region: Region, mask: BlockMask) = notAllowed()
+    override fun setBlocksBulk(region: Region, pattern: BlockPattern) = notAllowed()
 
-    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) = notAllowed()
+    override fun setBlocksBulk(locations: List<Location>, pattern: BlockPattern) = notAllowed()
 
     private fun notAllowed(): Nothing = throw UnsupportedOperationException("AutoBlockSettingMethod must delegate")
 }

@@ -3,7 +3,7 @@ package me.bristermitten.fancyprivatemines.mine
 import io.papermc.lib.PaperLib
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockData
-import me.bristermitten.fancyprivatemines.block.FractionalBlockMask
+import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.block.toBlockData
 import me.bristermitten.fancyprivatemines.block.toBlockMask
 import me.bristermitten.fancyprivatemines.data.Region
@@ -50,7 +50,7 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
 
                 plugin.configuration.blockSetting.methods.active.setBlock(spawnPoint, Material.AIR.toBlockData().toBlockMask())
 
-                val mask = FractionalBlockMask(
+                val mask = FractionalBlockPattern(
                         listOf(
                                 Material.STONE.toBlockData().toBlockMask(),
                                 Material.COAL_ORE.toBlockData().toBlockMask(),

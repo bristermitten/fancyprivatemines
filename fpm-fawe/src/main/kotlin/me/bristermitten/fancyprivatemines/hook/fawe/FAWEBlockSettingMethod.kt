@@ -2,7 +2,7 @@ package me.bristermitten.fancyprivatemines.hook.fawe
 
 import com.sk89q.worldedit.regions.CuboidRegion
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.block.BlockMask
+import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingMethod
 import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
@@ -13,7 +13,7 @@ class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod
     override val priority: Int = 5 //FAWE is the highest speed, so will be prioritised
 
 
-    override fun setBlock(location: ImmutableLocation, data: BlockMask) {
+    override fun setBlock(location: ImmutableLocation, data: BlockPattern) {
 
         val session = location.bukkitWorld.editSession
 
@@ -23,20 +23,20 @@ class FAWEBlockSettingMethod(val plugin: FancyPrivateMines) : BlockSettingMethod
         session.setBlock(location.toWorldEditVector(), baseBlock)
     }
 
-    override fun setBlocksBulk(region: Region, mask: BlockMask) {
+    override fun setBlocksBulk(region: Region, pattern: BlockPattern) {
         val session = region.world.editSession
 
         val weRegion = CuboidRegion(region.min.toWorldEditVector(), region.max.toWorldEditVector())
-        session.setBlocks(weRegion, mask.toWEPattern())
+        session.setBlocks(weRegion, pattern.toWEPattern())
         session.flushQueue()
     }
 
-    override fun setBlocksBulk(locations: List<Location>, mask: BlockMask) {
+    override fun setBlocksBulk(locations: List<Location>, pattern: BlockPattern) {
         if (locations.isEmpty()) {
             return
         }
         val session = locations[0].world.editSession
 
-        session.setBlocks(locations.asSequence().map { it.toWorldEditVector() }.toSet(), mask.toWEPattern())
+        session.setBlocks(locations.asSequence().map { it.toWorldEditVector() }.toSet(), pattern.toWEPattern())
     }
 }

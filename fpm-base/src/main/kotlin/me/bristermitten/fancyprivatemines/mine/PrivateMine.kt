@@ -2,7 +2,7 @@ package me.bristermitten.fancyprivatemines.mine
 
 import kotlinx.serialization.Serializable
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.block.BlockMask
+import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
 import me.bristermitten.fancyprivatemines.serializer.UUIDSerializer
@@ -11,20 +11,20 @@ import kotlin.math.max
 
 @Serializable
 data class PrivateMine(
-        val id: Long = nextId,
-        @Serializable(with = UUIDSerializer::class)
+    val id: Long = nextId,
+    @Serializable(with = UUIDSerializer::class)
         val owner: UUID,
-        var name: String?,
-        var open: Boolean = true,
-        var blocks: BlockMask,
-        var taxPercentage: Double,
-        var spawnLocation: ImmutableLocation,
-        var region: Region,
-        var miningRegion: Region
+    var name: String?,
+    var open: Boolean = true,
+    var blocks: BlockPattern,
+    var taxPercentage: Double,
+    var spawnLocation: ImmutableLocation,
+    var region: Region,
+    var miningRegion: Region
 ) {
 
     init {
-        highestId = max(id, highestId) //If we're deserializing something with an ID of say, 6, we need to make sure that highestId compensates for this
+        highestId = max(id, highestId) //If we're deserializing something with an ID of eg 6, we need to make sure that highestId compensates for this
     }
 
     companion object {

@@ -4,10 +4,10 @@ enum class Errors(private val messageKey: String? = null, override val default: 
 
     UnknownCommand(default = "Unknown Command."),
     MustBePlayer(default = "Only players can run this command"),
-    NotEnoughArgs("Not enough arguments."),
-    TooManyArgs("Too many arguments."),
-    WrongArgsLength("Wrong number of arguments."),
-    UnknownPrivateMine("Unknown PrivateMine."),
+    NotEnoughArgs(default = "Not enough arguments."),
+    TooManyArgs(default = "Too many arguments."),
+    WrongArgsLength(default = "Wrong number of arguments."),
+    UnknownPrivateMine(default = "Unknown PrivateMine."),
     NoPermission
     ;
 

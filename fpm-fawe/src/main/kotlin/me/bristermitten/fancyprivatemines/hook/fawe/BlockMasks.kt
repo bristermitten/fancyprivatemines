@@ -3,21 +3,21 @@ package me.bristermitten.fancyprivatemines.hook.fawe
 import com.sk89q.worldedit.blocks.BaseBlock
 import com.sk89q.worldedit.function.pattern.Pattern
 import com.sk89q.worldedit.function.pattern.RandomPattern
-import me.bristermitten.fancyprivatemines.block.BlockMask
-import me.bristermitten.fancyprivatemines.block.FractionalBlockMask
-import me.bristermitten.fancyprivatemines.block.RandomBlockMask
-import me.bristermitten.fancyprivatemines.block.SimpleBlockMask
+import me.bristermitten.fancyprivatemines.pattern.BlockPattern
+import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
+import me.bristermitten.fancyprivatemines.pattern.RandomBlockPattern
+import me.bristermitten.fancyprivatemines.pattern.SimpleBlockPattern
 
-fun BlockMask.toWEPattern(): Pattern {
+fun BlockPattern.toWEPattern(): Pattern {
     when (this) {
-        is RandomBlockMask -> {
+        is RandomBlockPattern -> {
             val pattern = RandomPattern()
             percentageProbabilities.forEach {
                 pattern.add(it.key.toBaseBlock(), 100f / it.value)
             }
             return pattern
         }
-        is FractionalBlockMask -> {
+        is FractionalBlockPattern -> {
             val total = blockParts.size
             val pattern = RandomPattern()
             blockParts.forEach {
@@ -25,7 +25,7 @@ fun BlockMask.toWEPattern(): Pattern {
             }
             return pattern
         }
-        is SimpleBlockMask -> {
+        is SimpleBlockPattern -> {
             return BaseBlock(block.material.id, block.data.toInt())
         }
         else -> throw UnsupportedOperationException("Cannot convert $javaClass to WE Block Mask")
