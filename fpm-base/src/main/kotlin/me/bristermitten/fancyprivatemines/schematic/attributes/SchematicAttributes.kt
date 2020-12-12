@@ -7,5 +7,5 @@ import java.util.concurrent.ConcurrentMap
 
 @Serializable
 data class SchematicAttributes(
-       val data: ConcurrentMap<String, AttributeValue<out @Contextual Any>>
+       val data: MutableMap<String, AttributeValue<out @Contextual Any>>
 )
