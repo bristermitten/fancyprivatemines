@@ -1,10 +1,10 @@
 package me.bristermitten.fancyprivatemines.menu
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.block.toBlockData
 import me.bristermitten.fancyprivatemines.block.toBlockMask
 import me.bristermitten.fancyprivatemines.mine.PrivateMine
+import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.util.color
 import me.mattstudios.mfgui.gui.components.buildItem
 import me.mattstudios.mfgui.gui.components.name
@@ -15,10 +15,10 @@ import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
-class MineMenu(val plugin: FancyPrivateMines) {
-    fun open(player: Player, mine: PrivateMine) {
+class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
+    override fun open(player: Player, mine: PrivateMine) {
         fun Gui.setStoneItem() {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             val count = if (blocks is FractionalBlockPattern) {
                 blocks.count(Material.STONE.toBlockData().toBlockMask()).coerceAtLeast(1)
             } else TODO()
@@ -26,7 +26,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
         }
 
         fun Gui.setCoalOreItem() {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             val count = if (blocks is FractionalBlockPattern) {
                 blocks.count(Material.COAL_ORE.toBlockData().toBlockMask()).coerceAtLeast(1)
             } else TODO()
@@ -34,7 +34,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
         }
 
         fun Gui.setCoalBlockItem() {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             val count = if (blocks is FractionalBlockPattern) {
                 blocks.count(Material.COAL_BLOCK.toBlockData().toBlockMask()).coerceAtLeast(1)
             } else TODO()
@@ -57,7 +57,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
         }.build()
 
         menu.items[3] = increaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.add(Material.STONE.toBlockData().toBlockMask())
                 menu.setStoneItem()
@@ -68,7 +68,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
             }
         }
         menu.items[4] = increaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.add(Material.COAL_ORE.toBlockData().toBlockMask())
                 menu.setCoalOreItem()
@@ -79,7 +79,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
             }
         }
         menu.items[5] = increaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.add(Material.COAL_BLOCK.toBlockData().toBlockMask())
                 menu.setCoalBlockItem()
@@ -95,7 +95,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
         menu.setCoalBlockItem()
 
         menu.items[12 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.remove(Material.STONE.toBlockData().toBlockMask())
                 menu.setStoneItem()
@@ -106,7 +106,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
             }
         }
         menu.items[13 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.remove(Material.COAL_ORE.toBlockData().toBlockMask())
                 menu.setCoalOreItem()
@@ -117,7 +117,7 @@ class MineMenu(val plugin: FancyPrivateMines) {
             }
         }
         menu.items[14 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.blocks
+            val blocks = mine.pattern
             if (blocks is FractionalBlockPattern) {
                 blocks.remove(Material.COAL_BLOCK.toBlockData().toBlockMask())
                 menu.setCoalBlockItem()
@@ -129,9 +129,8 @@ class MineMenu(val plugin: FancyPrivateMines) {
         }
         menu.open(player)
     }
-    private fun Gui.setBlockItem(slot: Int, amount: Int, item: Material) {
-        items[slot] = buildItem(item).setName("$amount").setAmount(amount).build().toGUIItem {
 
-        }
+    private fun Gui.setBlockItem(slot: Int, amount: Int, item: Material) {
+        items[slot] = buildItem(item).setName("$amount").setAmount(amount).build().toGUIItem {}
     }
 }

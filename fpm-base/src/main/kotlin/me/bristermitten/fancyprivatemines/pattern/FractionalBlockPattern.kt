@@ -6,7 +6,10 @@ import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.menu.FractionalBlockPatternMenu
+import me.bristermitten.fancyprivatemines.menu.Menu
 
 @Serializable(with = FractionalBlockPattern.Serializer::class)
 class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
@@ -45,6 +48,10 @@ class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
 
     override fun generateBulk(amount: Int): List<BlockData> {
         return List(amount) { parts.random().generate() }
+    }
+
+    override fun createMenu(plugin: FancyPrivateMines): Menu {
+        return FractionalBlockPatternMenu(plugin)
     }
 
     object Serializer : KSerializer<FractionalBlockPattern> {

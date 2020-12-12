@@ -7,7 +7,9 @@ import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockData
+import me.bristermitten.fancyprivatemines.menu.Menu
 import java.util.*
 import kotlin.streams.toList
 
@@ -60,6 +62,10 @@ class RandomBlockPattern(
                     probabilityMap.ceilingEntry(it).value
                 }.filter(Objects::nonNull)
                 .toList()
+    }
+
+    override fun createMenu(plugin: FancyPrivateMines): Menu? {
+        return null
     }
 
     object Serializer : KSerializer<RandomBlockPattern> {

@@ -4,7 +4,7 @@ import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.command.getPrivateMine
 import me.bristermitten.fancyprivatemines.command.lengthMustBeAtLeast
 import me.bristermitten.fancyprivatemines.command.mustBePlayer
-import me.bristermitten.fancyprivatemines.menu.MineMenu
+import me.bristermitten.fancyprivatemines.lang.key.LangKey
 import org.bukkit.command.CommandSender
 
 class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
@@ -16,7 +16,16 @@ class MenuSubCommand(val plugin: FancyPrivateMines) : SubCommand(
         args lengthMustBeAtLeast 1
 
         val mine = args[0].getPrivateMine()
-        MineMenu(plugin).open(sender, mine)
+        val menu = mine.pattern.createMenu(plugin) ?: run {
+            plugin.langComponent.message(sender, object : LangKey {
+                override val key: String
+                    get() = "blah"
+                override val default: String  = "No Menu for this Mine Type"
+            })
+            return
+        }
+
+        menu.open(sender, mine)
     }
 
 
