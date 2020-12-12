@@ -4,5 +4,6 @@ include('fpm-all',
         'fpm-base',
         'fpm-fawe',
         'fpm-autosell',
-        'fpm-plotsquared')
+        'fpm-plotsquared',
+        'fpm-vault')
 

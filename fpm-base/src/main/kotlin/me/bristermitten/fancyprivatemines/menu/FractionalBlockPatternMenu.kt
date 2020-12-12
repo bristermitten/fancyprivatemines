@@ -17,36 +17,15 @@ import org.bukkit.inventory.ItemStack
 
 class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
     override fun open(player: Player, mine: PrivateMine) {
-        fun Gui.setStoneItem() {
-            val blocks = mine.pattern
-            val count = if (blocks is FractionalBlockPattern) {
-                blocks.count(Material.STONE.toBlockData().toBlockMask()).coerceAtLeast(1)
-            } else TODO()
-            setBlockItem(12, count, Material.STONE)
-        }
-
-        fun Gui.setCoalOreItem() {
-            val blocks = mine.pattern
-            val count = if (blocks is FractionalBlockPattern) {
-                blocks.count(Material.COAL_ORE.toBlockData().toBlockMask()).coerceAtLeast(1)
-            } else TODO()
-            setBlockItem(13, count, Material.COAL_ORE)
-        }
-
-        fun Gui.setCoalBlockItem() {
-            val blocks = mine.pattern
-            val count = if (blocks is FractionalBlockPattern) {
-                blocks.count(Material.COAL_BLOCK.toBlockData().toBlockMask()).coerceAtLeast(1)
-            } else TODO()
-            setBlockItem(14, count, Material.COAL_BLOCK)
-        }
+        val pattern = mine.pattern
+        require(pattern is FractionalBlockPattern) { "Pattern must be FractionalBlockPattern" }
 
         val menu = Gui(3, "PrivateMine Management")
         menu.setDefaultClickAction {
             it.isCancelled = true
         }
-        menu.filler.fill(ItemStack(Material.STAINED_GLASS_PANE, 1, 7).toGUIItem {
-        })
+
+        menu.filler.fill(ItemStack(Material.STAINED_GLASS_PANE, 1, 7).toGUIItem {})
 
         val increaseItem = buildItem(ItemStack(Material.STAINED_GLASS, 1, 5)) {
             name = "&aIncrease Count".color()
@@ -56,16 +35,16 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
             name = "&cDecrease Count".color()
         }.build()
 
+        val base = 9
+        pattern.blockParts.groupingBy{it}.eachCount().entries.forEachIndexed { index, patterns ->
+            val block = patterns.key
+            menu.items[index + base] = buildItem(block).setName("$amount").setAmount(amount).build().toGUIItem {}
+        }
         menu.items[3] = increaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
                 blocks.add(Material.STONE.toBlockData().toBlockMask())
                 menu.setStoneItem()
                 menu.update()
                 mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
-            }
         }
         menu.items[4] = increaseItem.toGUIItem {
             val blocks = mine.pattern
@@ -90,9 +69,6 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
             }
         }
 
-        menu.setStoneItem()
-        menu.setCoalOreItem()
-        menu.setCoalBlockItem()
 
         menu.items[12 + 9] = decreaseItem.toGUIItem {
             val blocks = mine.pattern

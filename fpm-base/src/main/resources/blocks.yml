@@ -1,5 +1,5 @@
 Blocks:
-  STONE: [] # Empty tag means that anyone can use this block
+  STONE: [ ] # Empty tag means that anyone can use this block
   DIAMOND_BLOCK:
     - "[MONEY] 50" #Users must spend $50 to unlock this block
     - "[PERMISSION] rank.diamond_block" #and have the rank.diamond_block permission

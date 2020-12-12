@@ -33,3 +33,8 @@ MineWorld: "privatemines"
 # JSON - CBOR based data storage. Not human readable, but very space efficient
 # CBOR is recommended as most of the time editing data files can lead to issues
 DataFormat: 'CBOR'
+
+# Who block requirements should check
+# Owner - The owner must fulfill the requirements for any blocks
+# Anyone - The block can be used as long as any member of the mine fills the requirements
+BlockRequirements: Owner

@@ -17,7 +17,11 @@ class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
 
     val blockParts get() = parts.toList()
 
+    @Throws(IllegalStateException::class)
     fun add(pattern: BlockPattern) {
+        if (parts.distinct().size >= MAX_SIZE) {
+            throw IllegalStateException("Reached maximum size")
+        }
         parts += pattern
     }
 
@@ -65,5 +69,9 @@ class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
         override fun deserialize(decoder: Decoder): FractionalBlockPattern {
             return FractionalBlockPattern(delegate.deserialize(decoder))
         }
+    }
+
+    companion object {
+        const val MAX_SIZE = 9
     }
 }
