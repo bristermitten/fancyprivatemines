@@ -66,7 +66,8 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                 }.asGuiItem {
                     pattern.add(block)
                     privateMine.fill(plugin)
-                    open(player, privateMine)
+                    open(player, privateMine) //TODO check the block's requirement every time it's added to ensure things
+                    //like MAX_PERCENTAGE work
                 }
 
                 menu.items[index + slotBase + 9] = buildItem(item) { //-1 item
