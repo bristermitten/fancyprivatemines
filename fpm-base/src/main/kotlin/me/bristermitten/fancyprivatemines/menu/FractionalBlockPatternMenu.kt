@@ -15,6 +15,7 @@ import me.mattstudios.mfgui.gui.guis.toGUIItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import kotlin.math.max
 
 class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
     private val blockMenu = BlockMenu(plugin, plugin.blocks)
@@ -76,15 +77,17 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     privateMine.fill(plugin)
                     open(player, privateMine)
                 }
-                index + slotBase
-            }?.index ?: 0
+                index
+            }?.index
 
-        val lastBlockSlot = slotBase + 9
-
-        for (i in ((slotBase + maxPlacedSlot) until lastBlockSlot)) {
+        println("maxPlacedSlot = ${maxPlacedSlot}")
+        val nextSlot = (maxPlacedSlot ?: -1) + 1
+        println("nextSlot = ${nextSlot}")
+        for (i in (nextSlot until 9)) {
             //choose a block
+            val slot = i + 9
             val glass = ItemStack(Material.STAINED_GLASS_PANE, 1, 5)
-            menu.items[i] = buildItem(glass) {
+            menu.items[slot] = buildItem(glass) {
                 lore = listOf(
                     "&7Empty Block Slot",
                     "&a&lUNLOCKED"
@@ -101,9 +104,5 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
             }
         }
         menu.open(player)
-    }
-
-    private fun Gui.setBlockItem(slot: Int, amount: Int, item: Material) {
-        items[slot] = buildItem(item).setName("$amount").setAmount(amount).build().toGUIItem {}
     }
 }

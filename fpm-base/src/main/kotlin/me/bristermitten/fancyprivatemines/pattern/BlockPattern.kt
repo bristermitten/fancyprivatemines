@@ -9,7 +9,9 @@ interface BlockPattern {
 
     fun generate(): BlockData
 
-    fun generateBulk(amount: Int): List<BlockData>
+    fun generateBulk(amount: Int): List<BlockData> {
+        return List(amount) { generate() }
+    }
 
-    fun createMenu(plugin: FancyPrivateMines) : Menu?
+    fun createMenu(plugin: FancyPrivateMines): Menu?
 }

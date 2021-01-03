@@ -51,10 +51,10 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                 plugin.configuration.blockSetting.methods.active.setBlock(spawnPoint, Material.AIR.toBlockData().toBlockMask())
 
                 val mask = FractionalBlockPattern(
-                        listOf(
-                                Material.STONE.toBlockData(),
-                                Material.COAL_ORE.toBlockData(),
-                                Material.COAL_BLOCK.toBlockData(),
+                        mapOf(
+                                Material.STONE.toBlockData() to 1,
+                                Material.COAL_ORE.toBlockData() to 1 ,
+                                Material.COAL_BLOCK.toBlockData() to 1,
                         )
                 )
                 plugin.configuration.blockSetting.methods.active.setBlocksBulk(makeRegion(miningRegionPoints[0], miningRegionPoints[1]), mask)

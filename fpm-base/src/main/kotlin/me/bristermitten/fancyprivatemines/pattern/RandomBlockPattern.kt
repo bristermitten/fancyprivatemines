@@ -1,7 +1,6 @@
 package me.bristermitten.fancyprivatemines.pattern
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -10,6 +9,7 @@ import kotlinx.serialization.encoding.Encoder
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.BlockData
 import me.bristermitten.fancyprivatemines.menu.Menu
+import me.bristermitten.fancyprivatemines.serializer.DelegatingSerialDescriptor
 import java.util.*
 import kotlin.streams.toList
 
@@ -19,6 +19,7 @@ class RandomBlockPattern(
 ) : BlockPattern {
     private val random = SplittableRandom()
 
+    @Transient
     private val probabilityMap = run {
         val map = TreeMap<Double, BlockData>()
 
@@ -70,7 +71,8 @@ class RandomBlockPattern(
 
     object Serializer : KSerializer<RandomBlockPattern> {
         private val mapSerializer = MapSerializer(BlockData.serializer(), Double.serializer())
-        override val descriptor: SerialDescriptor = mapSerializer.descriptor
+        @ExperimentalSerializationApi
+        override val descriptor: SerialDescriptor = DelegatingSerialDescriptor("RandomBlockPattern", mapSerializer.descriptor)
 
         override fun serialize(encoder: Encoder, value: RandomBlockPattern) {
             mapSerializer.serialize(encoder, value.percentageProbabilities)
