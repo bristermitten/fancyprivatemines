@@ -1,11 +1,15 @@
 package me.bristermitten.fancyprivatemines
 
+import me.bristermitten.fancyprivatemines.block.MineBlocks
+import me.bristermitten.fancyprivatemines.block.requirement.BlockRequirements
 import me.bristermitten.fancyprivatemines.command.FancyPrivateMinesCommand
 import me.bristermitten.fancyprivatemines.component.blocks.BlockSettingComponent
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
+import me.bristermitten.fancyprivatemines.logging.JDKLogging
+import me.bristermitten.fancyprivatemines.logging.fpmLogger
 import me.bristermitten.fancyprivatemines.mine.PrivateMineStorage
 import me.bristermitten.fancyprivatemines.schematic.SchematicLoader
 import me.bristermitten.fancyprivatemines.schematic.SchematicScanner
@@ -14,6 +18,7 @@ import me.bristermitten.fancyprivatemines.serializer.SerializationComponent
 import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 
 class FancyPrivateMines : JavaPlugin() {
@@ -33,21 +38,34 @@ class FancyPrivateMines : JavaPlugin() {
     val schematicLoader = SchematicLoader(this)
     val schematicScanner = SchematicScanner(this, schematicLoader)
 
+    val blocks = MineBlocks(BlockRequirements())
+
     private val minesFile = dataFolder.resolve("mines.dat")
 
 
     override fun onEnable() {
+        fpmLogger = JDKLogging(logger)
         loadConfig()
         loadHooks()
         loadComponents()
         loadCommands()
         loadMines()
+        loadBlocks()
         schematicsDir.mkdir()
     }
 
     private fun loadConfig() {
         saveDefaultConfig()
         pmConfig = PrivateMinesConfig.from(config)
+    }
+
+    private fun loadBlocks() {
+        saveResource("blocks.yml", false)
+        val blocksConfig = YamlConfiguration()
+        val blocksFile = dataFolder.resolve("blocks.yml")
+        blocksConfig.load(blocksFile)
+        val section = blocksConfig.getConfigurationSection("Blocks")
+        blocks.loadFrom(section)
     }
 
     private fun loadMines() {
@@ -61,16 +79,16 @@ class FancyPrivateMines : JavaPlugin() {
         val scanner = ZISScanner(javaClass)
 
         val hooksLoaded = scanner.provideSubTypesOf<Hook>()
-                .filterHasNoArgConstructor()
-                .map { it.getConstructor().newInstance() }
-                .filter(Hook::canRegister)
-                .onEach {
-                    logger.fpmDebug {
-                        "Loaded hook ${it.javaClass.name}"
-                    }
-                    it.register(this)
-                } //FP with side effects :)
-                .count()
+            .filterHasNoArgConstructor()
+            .map { it.getConstructor().newInstance() }
+            .filter(Hook::canRegister)
+            .onEach {
+                logger.fpmDebug {
+                    "Loaded hook ${it.javaClass.name}"
+                }
+                it.register(this)
+            } //FP with side effects :)
+            .count()
 
         logger.info { "Registered $hooksLoaded Hooks!" }
     }

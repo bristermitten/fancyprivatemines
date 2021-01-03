@@ -1,4 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
+plugins {
+    id 'java-library'
+}
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
@@ -7,21 +10,20 @@ processResources {
 }
 
 repositories {
-    maven {
-        url 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
-    }
-    mavenLocal()
+    maven { url 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
+    maven { url 'https://repo.bristermitten.me/repository/maven-public/' }
 }
 
 dependencies {
-    implementation 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
-    implementation 'net.kyori:adventure-api:4.0.0-SNAPSHOT'
-    implementation 'net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT'
+    api 'net.kyori:adventure-text-minimessage:4.0.0-SNAPSHOT'
+    api 'net.kyori:adventure-api:4.0.0-SNAPSHOT'
+    api 'net.kyori:adventure-platform-bukkit:4.0.0-SNAPSHOT'
 
-    implementation "me.mattstudios.utils:matt-framework-gui:2.0.2"
-    implementation "me.bristermitten:mf-gui-kotlin:1.0-SNAPSHOT"
+    def mf_gui_version = "2.0.2"
+    api "me.mattstudios.utils:matt-framework-gui:$mf_gui_version"
+    api "me.bristermitten:mf-gui-kotlin:$mf_gui_version"
 
-    implementation "io.papermc:paperlib:1.0.5"
+    api "io.papermc:paperlib:1.0.5"
 
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }

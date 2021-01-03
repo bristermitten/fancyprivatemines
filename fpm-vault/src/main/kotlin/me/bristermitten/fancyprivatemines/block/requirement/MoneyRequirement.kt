@@ -11,8 +11,7 @@ class MoneyRequirement(private val economy: Economy) : Requirement {
 
     override fun meets(player: Player, mineBlock: MineBlock, privateMine: PrivateMine, data: String?): Boolean {
         requireNotNull(data) { "MONEY must have an amount" }
-        val requirement = requireNotNull(data.toDouble()) { "Invalid number for MONEY $data" }
-
+        val requirement = requireNotNull(data.toDoubleOrNull()) { "Invalid number for MONEY $data" }
 
         return economy.getBalance(player) >= requirement
     }

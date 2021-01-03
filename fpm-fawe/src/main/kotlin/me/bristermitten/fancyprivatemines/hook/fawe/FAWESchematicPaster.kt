@@ -53,7 +53,7 @@ class FAWESchematicPaster : SchematicPaster() {
         val extent = region.min.bukkitWorld.editSession
         FastIterator(weRegion, extent).asSequence().map {
             val block = extent.getBlock(it)
-            it.toLocation(world) to BlockData(Material.values()[block.type], block.data.toByte())
+            it.toLocation(world) to BlockData(Material.values()[block.type], block.data.toShort())
         }.filter {
             it.second.material != Material.AIR
         }.forEach {

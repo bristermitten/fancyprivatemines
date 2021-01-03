@@ -4,7 +4,7 @@ import me.bristermitten.fancyprivatemines.block.MineBlock
 import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import org.bukkit.entity.Player
 
-class MaxPercentageRequirement : Requirement {
+object MaxPercentageRequirement : Requirement {
     override val type: String = "MAX_PERCENTAGE"
 
     override fun meets(player: Player, mineBlock: MineBlock, privateMine: PrivateMine, data: String?): Boolean {

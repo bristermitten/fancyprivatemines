@@ -12,28 +12,34 @@ import me.bristermitten.fancyprivatemines.menu.FractionalBlockPatternMenu
 import me.bristermitten.fancyprivatemines.menu.Menu
 
 @Serializable(with = FractionalBlockPattern.Serializer::class)
-class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
+class FractionalBlockPattern(parts: List<BlockData>? = null) : BlockPattern {
     private val parts = parts?.toMutableList() ?: mutableListOf()
 
     val blockParts get() = parts.toList()
 
     @Throws(IllegalStateException::class)
-    fun add(pattern: BlockPattern) {
+    fun add(pattern: BlockData) {
         if (parts.distinct().size >= MAX_SIZE) {
             throw IllegalStateException("Reached maximum size")
         }
         parts += pattern
     }
 
-    fun count(pattern: BlockPattern): Int {
+    fun count(pattern: BlockData): Int {
         return parts.count { it == pattern }
     }
 
-    fun remove(pattern: BlockPattern, noRemove: Boolean = true) {
+    fun remove(pattern: BlockData, noRemove: Boolean = true) {
         if (noRemove && count(pattern) == 1) {
             return
         }
         parts -= pattern
+    }
+
+    fun replace(pattern: BlockData, replacement: BlockData) {
+        parts.replaceAll {
+            if (it == pattern) replacement else it
+        }
     }
 
     /**
@@ -47,11 +53,11 @@ class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
     }
 
     override fun generate(): BlockData {
-        return parts.random().generate()
+        return parts.random()
     }
 
     override fun generateBulk(amount: Int): List<BlockData> {
-        return List(amount) { parts.random().generate() }
+        return List(amount) { parts.random() }
     }
 
     override fun createMenu(plugin: FancyPrivateMines): Menu {
@@ -59,7 +65,7 @@ class FractionalBlockPattern(parts: List<BlockPattern>? = null) : BlockPattern {
     }
 
     object Serializer : KSerializer<FractionalBlockPattern> {
-        private val delegate = ListSerializer(kotlinx.serialization.serializer<BlockPattern>())
+        private val delegate = ListSerializer(BlockData.serializer())
         override val descriptor: SerialDescriptor = delegate.descriptor
 
         override fun serialize(encoder: Encoder, value: FractionalBlockPattern) {

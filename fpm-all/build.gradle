@@ -9,9 +9,9 @@ dependencies {
     api project(':fpm-fawe')
     api project(':fpm-autosell')
     api project(':fpm-plotsquared')
+    api project(':fpm-vault')
 }
 
 shadowJar {
     minimize()
-
 }

@@ -12,3 +12,4 @@ fun Material.toBlockData() = BlockData(this)
 fun BlockData.toBlockMask() = SimpleBlockPattern(this)
 
 fun BlockData.toItemStack() = ItemStack(material, 1, data)
+

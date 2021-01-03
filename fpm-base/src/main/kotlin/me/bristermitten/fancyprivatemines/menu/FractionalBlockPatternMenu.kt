@@ -1,12 +1,13 @@
 package me.bristermitten.fancyprivatemines.menu
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
-import me.bristermitten.fancyprivatemines.block.toBlockData
-import me.bristermitten.fancyprivatemines.block.toBlockMask
+import me.bristermitten.fancyprivatemines.block.toItemStack
 import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.util.color
+import me.mattstudios.mfgui.gui.components.amount
 import me.mattstudios.mfgui.gui.components.buildItem
+import me.mattstudios.mfgui.gui.components.lore
 import me.mattstudios.mfgui.gui.components.name
 import me.mattstudios.mfgui.gui.guis.Gui
 import me.mattstudios.mfgui.gui.guis.items
@@ -16,8 +17,17 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
-    override fun open(player: Player, mine: PrivateMine) {
-        val pattern = mine.pattern
+    private val blockMenu = BlockMenu(plugin, plugin.blocks)
+    private val increaseItem = buildItem(ItemStack(Material.STAINED_GLASS, 1, 5)) {
+        name = "&aIncrease Count".color()
+    }.build()
+
+    private val decreaseItem = buildItem(ItemStack(Material.STAINED_GLASS, 1, 14)) {
+        name = "&cDecrease Count".color()
+    }.build()
+
+    override fun open(player: Player, privateMine: PrivateMine) {
+        val pattern = privateMine.pattern
         require(pattern is FractionalBlockPattern) { "Pattern must be FractionalBlockPattern" }
 
         val menu = Gui(3, "PrivateMine Management")
@@ -27,80 +37,67 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
 
         menu.filler.fill(ItemStack(Material.STAINED_GLASS_PANE, 1, 7).toGUIItem {})
 
-        val increaseItem = buildItem(ItemStack(Material.STAINED_GLASS, 1, 5)) {
-            name = "&aIncrease Count".color()
-        }.build()
 
-        val decreaseItem = buildItem(ItemStack(Material.STAINED_GLASS, 1, 14)) {
-            name = "&cDecrease Count".color()
-        }.build()
+        val slotBase = 9 //first column of the second row
+        val maxPlacedSlot =
+            pattern.blockParts.groupingBy { it }.eachCount().entries.withIndex().maxByOrNull { (index, patterns) ->
+                val block = patterns.key
+                val blockAmount = patterns.value
+                val item = block.toItemStack()
 
-        val base = 9
-        pattern.blockParts.groupingBy{it}.eachCount().entries.forEachIndexed { index, patterns ->
-            val block = patterns.key
-            menu.items[index + base] = buildItem(block).setName("$amount").setAmount(amount).build().toGUIItem {}
-        }
-        menu.items[3] = increaseItem.toGUIItem {
-                blocks.add(Material.STONE.toBlockData().toBlockMask())
-                menu.setStoneItem()
-                menu.update()
-                mine.fill(plugin)
-        }
-        menu.items[4] = increaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
-                blocks.add(Material.COAL_ORE.toBlockData().toBlockMask())
-                menu.setCoalOreItem()
-                menu.update()
-                mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
-            }
-        }
-        menu.items[5] = increaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
-                blocks.add(Material.COAL_BLOCK.toBlockData().toBlockMask())
-                menu.setCoalBlockItem()
-                menu.update()
-                mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
-            }
-        }
+                menu.items[index + slotBase] = buildItem(item) { //Information item
+                    name = block.material.toString()
+                    amount = blockAmount
+                }.asGuiItem {
+                    blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
+                        if (u != null) {
+                            throw u
+                        }
+                        pattern.replace(block, newBlock.block)
+                        privateMine.fill(plugin)
+                        open(player, privateMine)
+                    }
+                }
 
+                menu.items[index + slotBase - 9] = buildItem(item) { //+1 item
+                    name = "&a+1".color()
+                    amount = 1
+                }.asGuiItem {
+                    pattern.add(block)
+                    privateMine.fill(plugin)
+                    open(player, privateMine)
+                }
 
-        menu.items[12 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
-                blocks.remove(Material.STONE.toBlockData().toBlockMask())
-                menu.setStoneItem()
-                menu.update()
-                mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
-            }
-        }
-        menu.items[13 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
-                blocks.remove(Material.COAL_ORE.toBlockData().toBlockMask())
-                menu.setCoalOreItem()
-                menu.update()
-                mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
-            }
-        }
-        menu.items[14 + 9] = decreaseItem.toGUIItem {
-            val blocks = mine.pattern
-            if (blocks is FractionalBlockPattern) {
-                blocks.remove(Material.COAL_BLOCK.toBlockData().toBlockMask())
-                menu.setCoalBlockItem()
-                menu.update()
-                mine.fill(plugin)
-            } else {
-                throw UnsupportedOperationException(blocks.javaClass.name)
+                menu.items[index + slotBase + 9] = buildItem(item) { //-1 item
+                    name = "&c-1".color()
+                    amount = 1
+                }.asGuiItem {
+                    pattern.remove(block)
+                    privateMine.fill(plugin)
+                    open(player, privateMine)
+                }
+                index + slotBase
+            }?.index ?: 0
+
+        val lastBlockSlot = slotBase + 9
+
+        for (i in ((slotBase + maxPlacedSlot) until lastBlockSlot)) {
+            //choose a block
+            val glass = ItemStack(Material.STAINED_GLASS_PANE, 1, 5)
+            menu.items[i] = buildItem(glass) {
+                lore = listOf(
+                    "&7Empty Block Slot",
+                    "&a&lUNLOCKED"
+                ).map(String::color)
+            }.asGuiItem {
+                blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
+                    if (u != null) {
+                        throw u
+                    }
+                    pattern.add(newBlock.block)
+                    privateMine.fill(plugin)
+                    open(player, privateMine)
+                }
             }
         }
         menu.open(player)

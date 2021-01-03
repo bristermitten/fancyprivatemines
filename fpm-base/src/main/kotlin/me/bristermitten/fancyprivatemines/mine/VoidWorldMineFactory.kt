@@ -38,8 +38,8 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
             try {
                 val region = paster.paste(schematicFile, location)
 
-                val miningRegionScanner = MiningRegionScanner(Material.SEA_LANTERN)
-                val spawnPointScanner = SpawnPointScanner(BlockData(Material.SAND, 1))
+                val miningRegionScanner = MiningRegionScanner(Material.POWERED_RAIL)
+                val spawnPointScanner = SpawnPointScanner(BlockData(Material.WOOL, 5))
                 plugin.schematicScanner.scan(region, mineSchematic, listOf(miningRegionScanner, spawnPointScanner))
 
                 val miningRegionPoints = mineSchematic.getAttributeFor(miningRegionScanner)
@@ -52,9 +52,9 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
 
                 val mask = FractionalBlockPattern(
                         listOf(
-                                Material.STONE.toBlockData().toBlockMask(),
-                                Material.COAL_ORE.toBlockData().toBlockMask(),
-                                Material.COAL_BLOCK.toBlockData().toBlockMask(),
+                                Material.STONE.toBlockData(),
+                                Material.COAL_ORE.toBlockData(),
+                                Material.COAL_BLOCK.toBlockData(),
                         )
                 )
                 plugin.configuration.blockSetting.methods.active.setBlocksBulk(makeRegion(miningRegionPoints[0], miningRegionPoints[1]), mask)

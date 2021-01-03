@@ -4,7 +4,7 @@ import me.bristermitten.fancyprivatemines.block.requirement.BlockRequirements
 import org.bukkit.Material
 import org.bukkit.configuration.ConfigurationSection
 
-class MineBlocks(private val blockRequirements: BlockRequirements) {
+class MineBlocks(val blockRequirements: BlockRequirements) {
     private val blocks = mutableMapOf<BlockData, MineBlock>()
 
     val all get() = blocks.values.toSet()
@@ -20,10 +20,11 @@ class MineBlocks(private val blockRequirements: BlockRequirements) {
     }
 
     fun loadFrom(section: ConfigurationSection) {
-        section.getKeys(false).mapNotNull {
-            it to (section.getStringList(it) ?: return@mapNotNull null)
-        }.map {
-            loadFrom(it.first, it.second)
+        section.getKeys(false).mapNotNull { key ->
+            val list = section.getStringList(key) ?: return@mapNotNull null
+            key to list
+        }.map { (key, requirements) ->
+            loadFrom(key, requirements)
         }
     }
 

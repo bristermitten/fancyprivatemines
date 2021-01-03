@@ -1,8 +1,8 @@
 package me.bristermitten.fancyprivatemines.hook.vault
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
+import me.bristermitten.fancyprivatemines.block.requirement.MoneyRequirement
 import me.bristermitten.fancyprivatemines.hook.Hook
-import me.bristermitten.fancyprivatemines.hook.vault.requirement.MoneyRequirement
 import me.bristermitten.fancyprivatemines.block.requirement.PermissionRequirement
 import net.milkbowl.vault.economy.Economy
 import net.milkbowl.vault.permission.Permission
@@ -19,14 +19,14 @@ class VaultHook : Hook {
         if (economy == null) {
             plugin.logger.warning { "Could not setup Vault Economy - do you have an Economy plugin?" }
         } else {
-            MoneyRequirement(economy) //TODO register
+            plugin.blocks.blockRequirements.load(MoneyRequirement(economy))
         }
 
         val permission = setupPermissions()
         if (permission == null) {
             plugin.logger.warning { "Could not setup Vault Permissions - do you have an Permissions plugin?" }
         } else {
-            PermissionRequirement(permission)
+            plugin.blocks.blockRequirements.load(PermissionRequirement(permission))
         }
     }
 

@@ -3,6 +3,7 @@ package me.bristermitten.fancyprivatemines.hook.fawe
 import com.sk89q.worldedit.blocks.BaseBlock
 import com.sk89q.worldedit.function.pattern.Pattern
 import com.sk89q.worldedit.function.pattern.RandomPattern
+import me.bristermitten.fancyprivatemines.block.BlockData
 import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.pattern.RandomBlockPattern
@@ -26,9 +27,11 @@ fun BlockPattern.toWEPattern(): Pattern {
             return pattern
         }
         is SimpleBlockPattern -> {
-            return BaseBlock(block.material.id, block.data.toInt())
+            return block.toWEPattern()
         }
         else -> throw UnsupportedOperationException("Cannot convert $javaClass to WE Block Mask")
     }
 
 }
+
+fun BlockData.toWEPattern() = BaseBlock(material.id, data.toInt())
