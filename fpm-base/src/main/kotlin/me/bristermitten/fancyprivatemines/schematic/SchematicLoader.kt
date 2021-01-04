@@ -4,8 +4,9 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
+import me.bristermitten.fancyprivatemines.logging.debug
+import me.bristermitten.fancyprivatemines.logging.fpmLogger
 import me.bristermitten.fancyprivatemines.schematic.attributes.SchematicAttributes
-import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.sha256Hash
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -27,7 +28,7 @@ class SchematicLoader(private val plugin: FancyPrivateMines) {
                 if (hash == meta.hash) {
                     return meta //It's safe to use, so return it
                 }
-                plugin.logger.fpmDebug { "Mine Schematic ${file.name} has changed (hashes do not match). Its meta will be re-computed." }
+                fpmLogger.debug { "Mine Schematic ${file.name} has changed (hashes do not match). Its meta will be re-computed." }
             } catch (e: Exception) {
                 plugin.logger.warning { "Invalid Schematic Metadata for ${file.name}. It will be re-computed once pasted." }
                 if (plugin.pmConfig.debug) {

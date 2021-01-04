@@ -18,4 +18,8 @@ data class SimpleBlockPattern(val block: BlockData) : BlockPattern {
     override fun createMenu(plugin: FancyPrivateMines): Menu? {
         return null
     }
+
+    override fun copy(): BlockPattern {
+        return SimpleBlockPattern(block)
+    }
 }

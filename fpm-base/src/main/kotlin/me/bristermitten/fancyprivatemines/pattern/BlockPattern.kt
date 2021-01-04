@@ -14,4 +14,6 @@ interface BlockPattern {
     }
 
     fun createMenu(plugin: FancyPrivateMines): Menu?
+
+    fun copy() : BlockPattern
 }

@@ -4,7 +4,8 @@ import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.data.ImmutableLocation
 import me.bristermitten.fancyprivatemines.data.Region
-import me.bristermitten.fancyprivatemines.util.fpmDebug
+import me.bristermitten.fancyprivatemines.logging.debug
+import me.bristermitten.fancyprivatemines.logging.fpmLogger
 import org.bukkit.Location
 
 class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSettingMethod() {
@@ -30,7 +31,7 @@ class AutoBlockSettingMethod(private val plugin: FancyPrivateMines) : BlockSetti
 
             if (plugin.pmConfig.debug) {
                 val exception = IllegalStateException("Max priority BlockSettingMethod was AutoBlockSettingMethod.")
-                plugin.logger.fpmDebug {
+                fpmLogger.debug {
                     "BlockSettingMethods: ${plugin.configuration.blockSetting.methods}"
                 }
                 throw exception

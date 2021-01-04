@@ -24,19 +24,23 @@ class FancyPrivateMinesCommand(val plugin: FancyPrivateMines) : Command(plugin) 
         plugin.langComponent.message(this, Commands.HELP_HEADER)
 
         subCommandMap.entries
-                .filter { hasPermission(it.value.permission ?: "") }
-                .forEach {
-                    plugin.langComponent.message(this, Commands.HELP_COMMAND,
-                            "%cmd_name%", it.key,
-                            "%cmd_description%", it.value.description ?: "")
-                }
+            .filter { hasPermission(it.value.permission ?: "") }
+            .forEach {
+                plugin.langComponent.message(
+                    this, Commands.HELP_COMMAND,
+                    "%cmd_name%", it.key,
+                    "%cmd_description%", it.value.description ?: ""
+                )
+            }
 
         plugin.langComponent.message(this, Commands.HELP_FOOTER)
     }
 
     override fun CommandSender.sendNoPermission(cmd: String, permission: String) {
-        plugin.langComponent.message(this, Errors.NoPermission,
-                "%permission%", permission,
-                "%cmd_name%", cmd)
+        plugin.langComponent.message(
+            this, Errors.NoPermission,
+            "%permission%", permission,
+            "%cmd_name%", cmd
+        )
     }
 }

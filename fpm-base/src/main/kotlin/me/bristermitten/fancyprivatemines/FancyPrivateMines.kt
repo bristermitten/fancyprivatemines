@@ -8,16 +8,19 @@ import me.bristermitten.fancyprivatemines.config.PrivateMinesConfig
 import me.bristermitten.fancyprivatemines.config.PrivateMinesConfiguration
 import me.bristermitten.fancyprivatemines.hook.Hook
 import me.bristermitten.fancyprivatemines.lang.LangComponent
-import me.bristermitten.fancyprivatemines.logging.JDKLogging
+import me.bristermitten.fancyprivatemines.logging.JDKLogger
+import me.bristermitten.fancyprivatemines.logging.debug
 import me.bristermitten.fancyprivatemines.logging.fpmLogger
 import me.bristermitten.fancyprivatemines.mine.PrivateMineStorage
+import me.bristermitten.fancyprivatemines.nms.NMSCompat
+import me.bristermitten.fancyprivatemines.nms.NOOPNMSCompat
 import me.bristermitten.fancyprivatemines.schematic.SchematicLoader
 import me.bristermitten.fancyprivatemines.schematic.SchematicScanner
 import me.bristermitten.fancyprivatemines.schematic.paster.SchematicPasterComponent
 import me.bristermitten.fancyprivatemines.serializer.SerializationComponent
-import me.bristermitten.fancyprivatemines.util.fpmDebug
 import me.bristermitten.fancyprivatemines.util.reflect.ZISScanner
 import me.bristermitten.fancyprivatemines.util.reflect.filterHasNoArgConstructor
+import me.bristermitten.fancyprivatemines.util.reflect.isConcrete
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -26,7 +29,6 @@ class FancyPrivateMines : JavaPlugin() {
     lateinit var pmConfig: PrivateMinesConfig
         private set
 
-    @Suppress("MemberVisibilityCanBePrivate")
     val blockSettingComponent = BlockSettingComponent()
     val langComponent = LangComponent()
     val pastingComponent = SchematicPasterComponent()
@@ -40,11 +42,12 @@ class FancyPrivateMines : JavaPlugin() {
 
     val blocks = MineBlocks(BlockRequirements())
 
+    var nmsCompat: NMSCompat = NOOPNMSCompat
+
     private val minesFile = dataFolder.resolve("mines.dat")
 
-
     override fun onEnable() {
-        fpmLogger = JDKLogging(logger)
+        fpmLogger = JDKLogger(logger)
         loadConfig()
         loadHooks()
         loadComponents()
@@ -61,9 +64,8 @@ class FancyPrivateMines : JavaPlugin() {
 
     private fun loadBlocks() {
         saveResource("blocks.yml", false)
-        val blocksConfig = YamlConfiguration()
         val blocksFile = dataFolder.resolve("blocks.yml")
-        blocksConfig.load(blocksFile)
+        val blocksConfig = YamlConfiguration.loadConfiguration(blocksFile)
         val section = blocksConfig.getConfigurationSection("Blocks")
         blocks.loadFrom(section)
     }
@@ -75,56 +77,60 @@ class FancyPrivateMines : JavaPlugin() {
     }
 
     private fun loadHooks() {
-        logger.info { "Registering Hooks" }
+        fpmLogger.info { "Registering Hooks" }
         val scanner = ZISScanner(javaClass)
 
-        val hooksLoaded = scanner.provideSubTypesOf<Hook>()
+        val hooksLoaded = scanner.provideSubTypesOf<Hook>().asSequence()
             .filterHasNoArgConstructor()
-            .map { it.getConstructor().newInstance() }
+            .filter { it.isConcrete }
+            .mapNotNull { hook ->
+                runCatching { hook.getConstructor().newInstance() }.onFailure {
+                    fpmLogger.warning { "Could not load hook $hook" }
+                    it.printStackTrace()
+                }.getOrNull()
+            }
             .filter(Hook::canRegister)
             .onEach {
-                logger.fpmDebug {
-                    "Loaded hook ${it.javaClass.name}"
-                }
+                fpmLogger.debug { "Loaded hook ${it.javaClass.name}" }
                 it.register(this)
             } //FP with side effects :)
             .count()
 
-        logger.info { "Registered $hooksLoaded Hooks!" }
+        fpmLogger.info { "Registered $hooksLoaded Hooks!" }
     }
 
     private fun loadComponents() {
-        logger.info { "Loading Components" }
+        fpmLogger.info { "Loading Components" }
 
         blockSettingComponent.init(this)
         langComponent.init(this)
         pastingComponent.init(this)
         serializationComponent.init(this)
 
-        logger.info { "Components Loaded" }
+        fpmLogger.info { "Components Loaded" }
     }
 
     private fun reloadComponents() {
-        logger.info { "Reloading Components" }
+        fpmLogger.info { "Reloading Components" }
 
         blockSettingComponent.reload(this)
         langComponent.reload(this)
         pastingComponent.reload(this)
         serializationComponent.reload(this)
 
-        logger.info { "Components Reloaded" }
+        fpmLogger.info { "Components Reloaded" }
     }
 
 
     private fun unloadComponents() {
-        logger.info { "Unloading Components" }
+        fpmLogger.info { "Unloading Components" }
 
         blockSettingComponent.destroy(this)
         langComponent.destroy(this)
         pastingComponent.destroy(this)
         serializationComponent.destroy(this)
 
-        logger.info { "Components Unloaded" }
+        fpmLogger.info { "Components Unloaded" }
     }
 
 

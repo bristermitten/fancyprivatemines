@@ -12,6 +12,7 @@ object JSONBasedSerializer : AbstractSerializer() {
     private val json = Json {
         serializersModule = fpmSerializersModule
         useArrayPolymorphism = true
+        allowStructuredMapKeys = true
     }
 
     @ExperimentalSerializationApi

@@ -88,6 +88,10 @@ class FractionalBlockPattern(
         return FractionalBlockPatternMenu(plugin)
     }
 
+    override fun copy(): BlockPattern {
+        return FractionalBlockPattern(parts)
+    }
+
     object Serializer : KSerializer<FractionalBlockPattern> {
         private val delegate = MapSerializer(BlockData.serializer(), Int.serializer())
         @ExperimentalSerializationApi

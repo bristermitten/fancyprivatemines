@@ -2,8 +2,9 @@ package me.bristermitten.fancyprivatemines.schematic
 
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.data.Region
+import me.bristermitten.fancyprivatemines.logging.debug
+import me.bristermitten.fancyprivatemines.logging.fpmLogger
 import me.bristermitten.fancyprivatemines.schematic.attributes.SchematicAttributeScanner
-import me.bristermitten.fancyprivatemines.util.fpmDebug
 import org.bukkit.Bukkit
 
 class SchematicScanner(private val plugin: FancyPrivateMines,
@@ -26,7 +27,7 @@ class SchematicScanner(private val plugin: FancyPrivateMines,
             //Attributes / metadata may have changed, so let's save it
             Bukkit.getScheduler().runTaskAsynchronously(plugin) {
                 loader.saveSchematic(schematic)
-                plugin.logger.fpmDebug { "Updated Schematic Metadata for ${schematic.fileName}" }
+                fpmLogger.debug { "Updated Schematic Metadata for ${schematic.fileName}" }
             }
         }
 

@@ -4,6 +4,7 @@ import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.toItemStack
 import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
+import me.bristermitten.fancyprivatemines.preview.previewFill
 import me.bristermitten.fancyprivatemines.util.color
 import me.mattstudios.mfgui.gui.components.amount
 import me.mattstudios.mfgui.gui.components.buildItem
@@ -15,7 +16,6 @@ import me.mattstudios.mfgui.gui.guis.toGUIItem
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import kotlin.math.max
 
 class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
     private val blockMenu = BlockMenu(plugin, plugin.blocks)
@@ -28,20 +28,25 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
     }.build()
 
     override fun open(player: Player, privateMine: PrivateMine) {
-        val pattern = privateMine.pattern
+        val pattern = privateMine.pattern.copy()
         require(pattern is FractionalBlockPattern) { "Pattern must be FractionalBlockPattern" }
 
         val menu = Gui(3, "PrivateMine Management")
         menu.setDefaultClickAction {
             it.isCancelled = true
         }
+        menu.setCloseGuiAction {
+            privateMine.pattern = pattern
+            privateMine.fill(plugin)
+        }
 
         menu.filler.fill(ItemStack(Material.STAINED_GLASS_PANE, 1, 7).toGUIItem {})
 
 
         val slotBase = 9 //first column of the second row
-        val maxPlacedSlot =
-            pattern.blockParts.groupingBy { it }.eachCount().entries.withIndex().maxByOrNull { (index, patterns) ->
+        val maxPlacedSlot = pattern.blockParts.groupingBy { it }
+            .eachCount().entries
+            .withIndex().maxByOrNull { (index, patterns) ->
                 val block = patterns.key
                 val blockAmount = patterns.value
                 val item = block.toItemStack()
@@ -55,7 +60,7 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                             throw u
                         }
                         pattern.replace(block, newBlock.block)
-                        privateMine.fill(plugin)
+                        privateMine.previewFill(player, pattern, plugin)
                         open(player, privateMine)
                     }
                 }
@@ -65,8 +70,11 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     amount = 1
                 }.asGuiItem {
                     pattern.add(block)
-                    privateMine.fill(plugin)
-                    open(player, privateMine) //TODO check the block's requirement every time it's added to ensure things
+                    privateMine.previewFill(player, pattern, plugin)
+                    open(
+                        player,
+                        privateMine
+                    ) //TODO check the block's requirement every time it's added to ensure things
                     //like MAX_PERCENTAGE work
                 }
 
@@ -75,15 +83,14 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     amount = 1
                 }.asGuiItem {
                     pattern.remove(block)
-                    privateMine.fill(plugin)
+                    privateMine.previewFill(player, pattern, plugin)
                     open(player, privateMine)
                 }
                 index
             }?.index
 
-        println("maxPlacedSlot = ${maxPlacedSlot}")
+
         val nextSlot = (maxPlacedSlot ?: -1) + 1
-        println("nextSlot = ${nextSlot}")
         for (i in (nextSlot until 9)) {
             //choose a block
             val slot = i + 9
@@ -99,7 +106,7 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                         throw u
                     }
                     pattern.add(newBlock.block)
-                    privateMine.fill(plugin)
+                    privateMine.previewFill(player, pattern, plugin)
                     open(player, privateMine)
                 }
             }

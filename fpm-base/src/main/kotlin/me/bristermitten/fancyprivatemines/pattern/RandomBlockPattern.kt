@@ -69,6 +69,9 @@ class RandomBlockPattern(
         return null
     }
 
+    override fun copy(): BlockPattern {
+        return RandomBlockPattern(percentageProbabilities)
+    }
     object Serializer : KSerializer<RandomBlockPattern> {
         private val mapSerializer = MapSerializer(BlockData.serializer(), Double.serializer())
         @ExperimentalSerializationApi
