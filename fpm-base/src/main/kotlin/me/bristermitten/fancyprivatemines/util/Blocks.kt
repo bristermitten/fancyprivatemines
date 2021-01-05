@@ -30,7 +30,6 @@ val Block.isVisible
     }
 
 fun Sequence<ImmutableLocation>.filterVisible(): Sequence<ImmutableLocation> {
-    val airBlocks = mutableSetOf<ImmutableLocation>()
     return filter { pos ->
         val block = pos.toLocation().block
         block.type == Material.AIR //If the block's type is air

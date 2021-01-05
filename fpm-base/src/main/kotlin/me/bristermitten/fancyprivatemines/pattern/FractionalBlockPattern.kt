@@ -30,6 +30,11 @@ class FractionalBlockPattern(
         parts.merge(pattern, 1, Int::plus)
     }
 
+    /**
+     * Count how many of a given [BlockData] is present
+     * This pattern is structured in a way that 0 will never be returned.
+     * If the [pattern] is not present, -1 is returned
+     */
     fun count(pattern: BlockData): Int {
         return parts[pattern] ?: -1
     }
@@ -56,11 +61,11 @@ class FractionalBlockPattern(
 
     fun replace(pattern: BlockData, replacement: BlockData) {
         val patternCount = count(pattern)
-        if (patternCount == 0) {
+        if (patternCount == -1) {
             return //nothing to replace
         }
         val replacementCount = count(replacement)
-        if (replacementCount == 0) {
+        if (replacementCount == -1) {
             //Simply replace with the current count
             parts[replacement] = patternCount
             removeAll(pattern)
@@ -91,6 +96,11 @@ class FractionalBlockPattern(
     override fun copy(): BlockPattern {
         return FractionalBlockPattern(parts)
     }
+
+    override fun toString(): String {
+        return "FractionalBlockPattern(parts=$parts)"
+    }
+
 
     object Serializer : KSerializer<FractionalBlockPattern> {
         private val delegate = MapSerializer(BlockData.serializer(), Int.serializer())
