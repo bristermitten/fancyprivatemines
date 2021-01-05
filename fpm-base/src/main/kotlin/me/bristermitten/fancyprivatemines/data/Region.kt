@@ -9,7 +9,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 @Serializable
-class Region(val min: ImmutableLocation, val max: ImmutableLocation) : Iterable<ImmutableLocation> {
+data class Region(val min: ImmutableLocation, val max: ImmutableLocation) : Iterable<ImmutableLocation> {
     @Transient
     val origin = min //Can't have this in the constructor due to KTX.Serialization #133
 
@@ -28,7 +28,7 @@ class Region(val min: ImmutableLocation, val max: ImmutableLocation) : Iterable<
 
     val chunks by lazy {
         points.map { it.chunkData }
-                .toSet()
+                .toSet() //TODO this is pretty wasteful, could be optimised
     }
 
     override fun iterator(): Iterator<ImmutableLocation> {

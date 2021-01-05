@@ -57,7 +57,10 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                                 Material.COAL_BLOCK.toBlockData() to 1,
                         )
                 )
-                plugin.configuration.blockSetting.methods.active.setBlocksBulk(makeRegion(miningRegionPoints[0], miningRegionPoints[1]), mask)
+
+                val miningRegion = makeRegion(miningRegionPoints[0], miningRegionPoints[1])
+                println(miningRegion)
+                plugin.configuration.blockSetting.methods.active.setBlocksBulk(miningRegion, mask)
 
                 val mine = PrivateMine(
                         PrivateMine.nextId,
@@ -68,7 +71,7 @@ class VoidWorldMineFactory(private val plugin: FancyPrivateMines) : MineFactory(
                         0.0,
                         spawnPoint,
                         region,
-                        Region(miningRegionPoints[0], miningRegionPoints[1])
+                        miningRegion
                 )
 
                 plugin.mineStorage.add(region.chunks, mine)

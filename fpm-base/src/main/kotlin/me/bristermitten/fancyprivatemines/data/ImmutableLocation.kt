@@ -25,6 +25,14 @@ data class ImmutableLocation(
         pitch = this.pitch + pitch
     )
 
+    fun add(x: Int = 0, y: Int = 0, z: Int = 0, yaw: Float = 0f, pitch: Float = 0f) = copy(
+        x = this.x + x,
+        y = this.y + y,
+        z = this.z + z,
+        yaw = this.yaw + yaw,
+        pitch = this.pitch + pitch
+    )
+
     val bukkitWorld: World
         get() = Bukkit.getWorld(world)
 }
