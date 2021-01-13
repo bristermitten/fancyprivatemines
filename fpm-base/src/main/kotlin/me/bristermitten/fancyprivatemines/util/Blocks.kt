@@ -31,9 +31,9 @@ val Block.isVisible
 
 fun Sequence<ImmutableLocation>.filterVisible(): Sequence<ImmutableLocation> {
     return filter { pos ->
-        val block = pos.toLocation().block
-        block.type == Material.AIR //If the block's type is air
-    }.flatMap { pos -> //All the relative blocks are visible
-        relative.map(pos::run)
+        relative.asSequence()
+            .map { it(pos) }
+            .map { it.toLocation().block }
+            .any { it.type == Material.AIR }
     }
 }

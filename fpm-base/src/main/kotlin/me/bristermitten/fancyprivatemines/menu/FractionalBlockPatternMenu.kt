@@ -6,10 +6,12 @@ import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.preview.previewFill
+import me.bristermitten.fancyprivatemines.scheduler.bukkitScheduler
 import me.bristermitten.fancyprivatemines.util.color
 import me.bristermitten.fancyprivatemines.util.prettyName
 import me.mattstudios.mfgui.gui.components.*
 import me.mattstudios.mfgui.gui.guis.Gui
+import me.mattstudios.mfgui.gui.guis.GuiItem
 import me.mattstudios.mfgui.gui.guis.items
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -21,6 +23,10 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
         name = " "
     }.asGuiItem()
 
+    private companion object {
+        const val ROW_SLOT_BASE = 9 //Second row, first column
+    }
+
     private fun handle(player: Player, privateMine: PrivateMine, pattern: BlockPattern = privateMine.pattern.copy()) {
         require(pattern is FractionalBlockPattern) { "Pattern must be FractionalBlockPattern" }
 
@@ -28,27 +34,29 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
         menu.setDefaultClickAction {
             it.isCancelled = true
         }
-        var handleClose = true
         menu.setCloseGuiAction {
-            if(handleClose) {
-                privateMine.pattern = pattern
-                privateMine.fill(plugin)
-            }
+            privateMine.pattern = pattern
+            privateMine.fill(plugin)
+            println("Filled")
         }
-
         menu.filler.fill(backgroundItem)
 
-        val slotBase = 9 //first column of the second row
+        fillPatternData(pattern, menu, player, privateMine)
 
-        val maxPlacedSlot = pattern.blockParts.groupingBy { it }
-            .eachCount().entries
-            .withIndex().maxByOrNull { (index, patterns) ->
+        menu.open(player)
+    }
+
+    private fun fillPatternData(pattern: FractionalBlockPattern, menu: Gui, player: Player, privateMine: PrivateMine) {
+
+        pattern.blockParts.groupingBy { it }
+            .eachCount().entries.forEachIndexed { index, patterns ->
+                println(index)
                 val block = patterns.key
+                println(block)
                 val blockAmount = patterns.value
 
                 val item = block.toItemStack()
-                val centerSlot = index + slotBase
-
+                val centerSlot = index + ROW_SLOT_BASE
 
                 menu.items[centerSlot] = ItemBuilder.from(item.clone()).apply { //Information item
                     name = block.material.prettyName()
@@ -59,24 +67,24 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     ).map(String::color)
                 }.asGuiItem {
                     if (it.isLeftClick) {
-                        handleClose = false
+                        menu.setCloseGuiAction {  } //Don't regen until we have to
                         blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
                             if (u != null) {
                                 throw u
                             }
                             pattern.replace(block, newBlock.block)
-                            println(pattern)
                             privateMine.previewFill(player, pattern, plugin)
+                            menu.setCloseGuiAction {  } //Don't regen until we have to
                             handle(player, privateMine, pattern)
                         }
                     }
                     if (it.isRightClick) {
                         pattern.removeAll(block)
                         privateMine.previewFill(player, pattern, plugin)
-                        handle(player, privateMine, pattern)
+                        fillPatternData(pattern, menu, player, privateMine)
+                        menu.update()
                     }
                 }
-
 
                 menu.items[centerSlot - 9] = buildItem(item.clone()) { //+1 item
                     name = "&a+1".color()
@@ -84,7 +92,7 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                 }.asGuiItem {
                     pattern.add(block)
                     privateMine.previewFill(player, pattern, plugin)
-                    handle(player, privateMine, pattern)
+                    fillPatternData(pattern, menu, player, privateMine)
                     //TODO check the block's requirement every time it's added to ensure things like MAX_PERCENTAGE work
                 }
 
@@ -92,39 +100,42 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     name = "&c-1".color()
                     amount = 1
                 }.asGuiItem {
-                    pattern.remove(block)
+                    pattern.remove(block, true)
                     privateMine.previewFill(player, pattern, plugin)
-                    handle(player, privateMine, pattern)
+                    fillPatternData(pattern, menu, player, privateMine)
                 }
+            }
 
-                index
-            }?.index
+        val nextSlot = pattern.blockTypes.size
 
-
-        val nextSlot = (maxPlacedSlot ?: -1) + 1
         for (i in (nextSlot until 9)) {
             //choose a block
             val slot = i + 9
             val glass = ItemStack(Material.STAINED_GLASS_PANE, 1, 5)
+
+            menu.items[slot + 9] = backgroundItem
+            menu.items[slot - 9] = backgroundItem
+            //Remove the +- 1 items in case they're leftover
+
             menu.items[slot] = buildItem(glass) {
                 lore = listOf(
                     "&7Empty Block Slot",
                     "&a&lUNLOCKED"
                 ).map(String::color)
             }.asGuiItem {
-                handleClose = false
                 blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
                     if (u != null) {
                         throw u
                     }
                     pattern.add(newBlock.block)
                     privateMine.previewFill(player, pattern, plugin)
-                    handle(player, privateMine, pattern)
+                    fillPatternData(pattern, menu, player, privateMine)
                 }
             }
         }
-        menu.open(player)
+        menu.update()
     }
+
     override fun open(player: Player, privateMine: PrivateMine) {
         handle(player, privateMine)
     }

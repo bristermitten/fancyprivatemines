@@ -10,10 +10,11 @@ fun PrivateMine.previewFill(player: Player, pattern: BlockPattern, plugin: Fancy
     val miningBlocks = miningRegion.points
         .asSequence()
         .filterVisible()
+        .toList()
 
-    miningBlocks.onEach { point ->
+    miningBlocks.forEach { point ->
         val block = pattern.generate()
         plugin.nmsCompat.blockPreviewService.setBlock(player, point, block)
-    }.count().apply(::println)
+    }
 
 }

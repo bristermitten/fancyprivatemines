@@ -3,8 +3,6 @@ package me.bristermitten.fancyprivatemines.pattern
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
@@ -21,6 +19,8 @@ class FractionalBlockPattern(
 
     @Transient
     val blockParts get() = parts.flatMap { (key, value) -> List(value) { key } }
+
+    val blockTypes get() = parts.keys.toSet()
 
     @Throws(IllegalStateException::class)
     fun add(pattern: BlockData) {
@@ -39,20 +39,28 @@ class FractionalBlockPattern(
         return parts[pattern] ?: -1
     }
 
-    fun remove(pattern: BlockData, noRemove: Boolean = true) {
+    /**
+     * Attempts to remove a single pattern
+     * @param pattern The pattern to remove
+     * @param fullRemove If the pattern should be fully removed (if only present once)
+     * @return If the pattern changed state at all
+     */
+    fun remove(pattern: BlockData, fullRemove: Boolean = false) : Boolean {
         val cur = count(pattern)
         if (cur == -1) {
-            return //Not present
+            return false//Not present
         }
         if (cur == 1) {
-            if (noRemove) {
-                return
+            return if (!fullRemove) {
+                false
             } else {
                 parts.remove(pattern)
+                true
             }
         }
 
         parts[pattern] = cur - 1
+        return true
     }
 
     fun removeAll(pattern: BlockData) {
