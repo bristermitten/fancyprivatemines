@@ -11,7 +11,7 @@ class RequirementParser(private val blockRequirements: BlockRequirements) {
         val type = groups.first().removeSurrounding("[", "]")
         val req = blockRequirements[type]
 
-        requireNotNull(req) { "Invalid Requirement Type $type" }
+        requireNotNull(req) { "Invalid Requirement Type $type, are you missing a plugin?" }
 
         return CachedRequirement(req, groups.getOrNull(1))
     }

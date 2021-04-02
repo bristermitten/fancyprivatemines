@@ -30,4 +30,10 @@ open class Functionalities<T : Functionality>(default: T?) {
     operator fun get(id: String): T? {
         return functionalities[id]
     }
+
+    override fun toString(): String {
+        return "Functionalities(functionalities=$functionalities, active=$active, all=$all)"
+    }
+
+
 }

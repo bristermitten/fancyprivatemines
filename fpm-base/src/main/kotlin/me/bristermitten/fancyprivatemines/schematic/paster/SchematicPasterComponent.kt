@@ -7,7 +7,9 @@ class SchematicPasterComponent : FPMComponent {
     override fun init(plugin: FancyPrivateMines) {
         val configuration = plugin.configuration
 
-        configuration.schematicPasters.active = configuration.schematicPasters.all.maxByOrNull { it.priority }!!
+        configuration.schematicPasters.active = configuration.schematicPasters.all.maxByOrNull { it.priority } ?: throw IllegalStateException(
+            "No Schematic Pasters present."
+        )
 
         configuration.schematicPasters.active.init()
 
