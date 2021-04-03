@@ -6,24 +6,16 @@ import java.util.jar.JarFile
 
 
 fun getFolderInResources(folderName: String): List<String> {
-    val names = mutableListOf<String>()
     val jarFile = FancyPrivateMines::class.java.protectionDomain.codeSource.location.path.run(::File)
 
     if (jarFile.isFile) {
-        val jar = JarFile(jarFile)
-
-        val entries = jar.entries()
-
-        while (entries.hasMoreElements()) {
-            val nextElement = entries.nextElement()
-            val name = nextElement.name
-
-            if (name.startsWith("$folderName/") && name != "$folderName/") {
-                names += name
-            }
+        return JarFile(jarFile).use { jar ->
+            jar.entries().asSequence()
+                .filter { it.name.startsWith("$folderName/") && it.name != "$folderName/" }
+                .map { it.name }
+                .toList()
         }
-        jar.close()
     }
     //TODO IDE
-    return names
+    return emptyList()
 }

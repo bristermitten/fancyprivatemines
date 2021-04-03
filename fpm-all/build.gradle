@@ -17,3 +17,8 @@ dependencies {
 shadowJar {
     minimize()
 }
+
+task buildAndCopy(type: Copy) {
+    from shadowJar
+    into '../spigot/plugins'
+}

@@ -12,10 +12,9 @@ class SpawnPointScanner(val compareTo: BlockData) : SchematicAttributeScanner<Lo
     override val attributesKey = "spawnPoint"
 
     override fun scan(block: BlockData, location: ImmutableLocation, region: Region, schematic: MineSchematic) {
-        if (block.material != compareTo.material || block.data != compareTo.data) {
+        if(block != compareTo) {
             return
         }
-
         val location = LocationAttributeValue(location relativeTo region.origin)
         schematic.attributes.data[attributesKey] = location
     }

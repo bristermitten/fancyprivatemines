@@ -1,17 +1,20 @@
 package me.bristermitten.fancyprivatemines.menu
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.toItemStack
 import me.bristermitten.fancyprivatemines.mine.PrivateMine
 import me.bristermitten.fancyprivatemines.pattern.BlockPattern
 import me.bristermitten.fancyprivatemines.pattern.FractionalBlockPattern
 import me.bristermitten.fancyprivatemines.preview.previewFill
-import me.bristermitten.fancyprivatemines.scheduler.bukkitScheduler
 import me.bristermitten.fancyprivatemines.util.color
+import me.bristermitten.fancyprivatemines.util.dispatcher
 import me.bristermitten.fancyprivatemines.util.prettyName
 import me.mattstudios.mfgui.gui.components.*
 import me.mattstudios.mfgui.gui.guis.Gui
-import me.mattstudios.mfgui.gui.guis.GuiItem
 import me.mattstudios.mfgui.gui.guis.items
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -34,25 +37,21 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
         menu.setDefaultClickAction {
             it.isCancelled = true
         }
-        menu.setCloseGuiAction {
-            privateMine.pattern = pattern
-            privateMine.fill(plugin)
-            println("Filled")
-        }
         menu.filler.fill(backgroundItem)
 
-        fillPatternData(pattern, menu, player, privateMine)
+        openPatternMenu(pattern, menu, player, privateMine)
 
         menu.open(player)
     }
 
-    private fun fillPatternData(pattern: FractionalBlockPattern, menu: Gui, player: Player, privateMine: PrivateMine) {
-
+    private fun openPatternMenu(pattern: FractionalBlockPattern, menu: Gui, player: Player, privateMine: PrivateMine) {
+        menu.setCloseGuiAction {
+            privateMine.pattern = pattern
+            privateMine.fill(plugin)
+        }
         pattern.blockParts.groupingBy { it }
             .eachCount().entries.forEachIndexed { index, patterns ->
-                println(index)
                 val block = patterns.key
-                println(block)
                 val blockAmount = patterns.value
 
                 val item = block.toItemStack()
@@ -67,21 +66,24 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     ).map(String::color)
                 }.asGuiItem {
                     if (it.isLeftClick) {
-                        menu.setCloseGuiAction {  } //Don't regen until we have to
-                        blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
-                            if (u != null) {
-                                throw u
-                            }
+                        menu.setCloseGuiAction { } //Don't regen until we have to
+
+                        CoroutineScope(plugin.dispatcher()).launch {
+                            val newBlock = blockMenu.openChoosingBlock(player, privateMine)
+
                             pattern.replace(block, newBlock.block)
-                            privateMine.previewFill(player, pattern, plugin)
-                            menu.setCloseGuiAction {  } //Don't regen until we have to
+                            withContext(Dispatchers.IO) {
+                                privateMine.previewFill(player, pattern, plugin)
+                            }
+
+                            menu.setCloseGuiAction { } //Don't regen until we have to
                             handle(player, privateMine, pattern)
                         }
                     }
                     if (it.isRightClick) {
                         pattern.removeAll(block)
                         privateMine.previewFill(player, pattern, plugin)
-                        fillPatternData(pattern, menu, player, privateMine)
+                        openPatternMenu(pattern, menu, player, privateMine)
                         menu.update()
                     }
                 }
@@ -92,7 +94,7 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                 }.asGuiItem {
                     pattern.add(block)
                     privateMine.previewFill(player, pattern, plugin)
-                    fillPatternData(pattern, menu, player, privateMine)
+                    openPatternMenu(pattern, menu, player, privateMine)
                     //TODO check the block's requirement every time it's added to ensure things like MAX_PERCENTAGE work
                 }
 
@@ -102,7 +104,7 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                 }.asGuiItem {
                     pattern.remove(block, true)
                     privateMine.previewFill(player, pattern, plugin)
-                    fillPatternData(pattern, menu, player, privateMine)
+                    openPatternMenu(pattern, menu, player, privateMine)
                 }
             }
 
@@ -123,13 +125,15 @@ class FractionalBlockPatternMenu(private val plugin: FancyPrivateMines) : Menu {
                     "&a&lUNLOCKED"
                 ).map(String::color)
             }.asGuiItem {
-                blockMenu.openChoosingBlock(player, privateMine).whenComplete { newBlock, u ->
-                    if (u != null) {
-                        throw u
-                    }
+                menu.setCloseGuiAction {  }
+                CoroutineScope(plugin.dispatcher()).launch {
+                    val newBlock = blockMenu.openChoosingBlock(player, privateMine)
                     pattern.add(newBlock.block)
-                    privateMine.previewFill(player, pattern, plugin)
-                    fillPatternData(pattern, menu, player, privateMine)
+                    withContext(Dispatchers.IO) {
+                        privateMine.previewFill(player, pattern, plugin)
+                    }
+                    openPatternMenu(pattern, menu, player, privateMine)
+                    menu.open(player)
                 }
             }
         }

@@ -1,5 +1,8 @@
 package me.bristermitten.fancyprivatemines.menu
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import me.bristermitten.fancyprivatemines.FancyPrivateMines
 import me.bristermitten.fancyprivatemines.block.MineBlock
 import me.bristermitten.fancyprivatemines.block.MineBlocks
@@ -10,12 +13,10 @@ import me.mattstudios.mfgui.gui.components.buildItem
 import me.mattstudios.mfgui.gui.components.lore
 import me.mattstudios.mfgui.gui.guis.paginatedGui
 import org.bukkit.entity.Player
-import java.util.concurrent.CompletableFuture
+import kotlin.coroutines.resume
 
 class BlockMenu(private val plugin: FancyPrivateMines, private val blocks: MineBlocks) : Menu {
-    fun openChoosingBlock(player: Player, privateMine: PrivateMine): CompletableFuture<MineBlock> {
-        val future = CompletableFuture<MineBlock>()
-
+    suspend fun openChoosingBlock(player: Player, privateMine: PrivateMine): MineBlock = suspendCancellableCoroutine {
         paginatedGui(3, "Blocks") {
             blocks.all.forEach { mineBlock ->
                 val item = buildItem(mineBlock.block.toItemStack()) {
@@ -32,16 +33,19 @@ class BlockMenu(private val plugin: FancyPrivateMines, private val blocks: MineB
                     if (mineBlock.requirements.all { cachedRequirement ->
                             cachedRequirement.requirement.meets(player, mineBlock, privateMine, cachedRequirement.data)
                         }) {
-                        future.complete(mineBlock)
+                        it.resume(mineBlock)
                     }
                 }
                 addItem(item)
             }
+        }.apply {
+            setCloseGuiAction { _ ->
+                it.cancel()
+            }
         }.open(player)
-        return future
     }
 
     override fun open(player: Player, privateMine: PrivateMine) {
-        openChoosingBlock(player, privateMine)
+        GlobalScope.launch { openChoosingBlock(player, privateMine) }
     }
 }

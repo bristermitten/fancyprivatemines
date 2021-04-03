@@ -10,8 +10,10 @@ private val sessionCache = WeakHashMap<World, EditSession>()
 internal val World.editSession
     get() = sessionCache.getOrPut(this) {
         EditSessionBuilder(this.name)
-                .allowedRegionsEverywhere()
-                .fastmode(true)
-                .changeSetNull()
-                .build().apply { enableQueue() }
+            .allowedRegionsEverywhere()
+            .fastmode(true)
+            .changeSetNull()
+            .build().apply {
+                enableQueue()
+            }
     }

@@ -154,8 +154,10 @@ class FancyPrivateMines : JavaPlugin() {
         this.pmConfig.loadFrom(PrivateMinesConfig.from(config))
     }
 
+
     fun reload() {
         reloadConfigData()
         reloadComponents()
+        loadBlocks()
     }
 }

@@ -6,5 +6,6 @@ import java.io.File
 import java.util.concurrent.CompletableFuture
 
 abstract class MineFactory {
-    abstract fun create(schematicFile: File, mineSchematic: MineSchematic, owner: Player): CompletableFuture<PrivateMine>
+
+    abstract suspend fun create(schematicFile: File, mineSchematic: MineSchematic, owner: Player): PrivateMine
 }

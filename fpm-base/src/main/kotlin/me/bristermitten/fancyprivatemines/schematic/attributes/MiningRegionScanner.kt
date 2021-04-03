@@ -16,7 +16,7 @@ class MiningRegionScanner(val compareTo: Material) : SchematicAttributeScanner<M
         if (block.material != compareTo) {
             return
         }
-        val list = (schematic.attributes.data[attributesKey] as? MultipleLocationAttributeValue ?: MultipleLocationAttributeValue(emptyList())).value
+        val list = (schematic.attributes.data[attributesKey] as? MultipleLocationAttributeValue)?.value ?: emptyList()
 
         schematic.attributes.data[attributesKey] = MultipleLocationAttributeValue(list + (location relativeTo region.origin))
     }

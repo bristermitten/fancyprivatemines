@@ -14,8 +14,8 @@ import org.bukkit.Material
 import java.io.File
 
 class FAWESchematicPaster : SchematicPaster() {
-    override val id: String = "FAWE"
-    override val priority: Int = 5
+    override val id = "FAWE"
+    override val priority = 5
 
     override fun paste(schematic: File, at: Location): Region {
         val format = ClipboardFormats.findByFile(schematic)
